@@ -14,10 +14,4 @@ void main()
 	//prueba del dll que hice!
 	Engine e;
 	e.startGLFW();
-	
-
-
-	
-
-
 }

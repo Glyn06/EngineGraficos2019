@@ -1,17 +1,20 @@
 #include "Renderer.h"
+
+#include "glew.h"
 #include"GLFW/glfw3.h"
-//#include"glew..."
-#include <iostream>
-using namespace std;
-
-
+float position[6]
+{
+	-0.5f, -0.5f,
+	0.0f, -0.5f,
+	0.5f, -0.5f,
+};
 Renderer::Renderer()
 {
 
-	unsinged int buffer;
-	glGenBuffers(1, buffer);
-	glbindbuffer(GL_ARRAY_BUFFER, buffer);	//solo se crea y binde el buffer hasta aca
-	glbuffer(GL_ARRAY_BUFFER, 6*sizeof(float), positions, GL_STATIC_DRAW);			// le especifico el tamaño de lo que va a recibir
+	
+	glGenBuffers(1, &_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer);	//solo se crea y binde el buffer hasta aca
+	glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), position, GL_STATIC_DRAW);			// le especifico el tamaño de lo que va a recibir
 	//aca iria el index buffer
 	//falta indicarle como interpreta los datos, orden, tipos de los atrib, tamano de cada atrib, hasta donde llega
 
@@ -30,5 +33,5 @@ void Renderer::Draw()
 
 Renderer::~Renderer()
 {
-	
+	glfwTerminate();
 }
