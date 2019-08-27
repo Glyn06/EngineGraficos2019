@@ -22,7 +22,7 @@ void Engine::startGLFW()
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
-
+		
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
