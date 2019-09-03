@@ -8,7 +8,7 @@ void Engine::startGLFW()
 	if (!glfwInit())
 		cout << "Fallo al inicializar la libreria";
 
-	Window* wind = new Window(480, 640, "f");
+	Window* wind = new Window(640, 480, "faaa");
 
 	GLFWwindow* window = wind->GetWindow();
 
