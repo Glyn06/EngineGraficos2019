@@ -81,11 +81,13 @@
       <AdditionalIncludeDirectories>$(SolutionDir)lib;$(SolutionDir)Engine;$(SolutionDir)glfw-3\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(SolutionDir)GLEW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy $(SolutionDir)lib\Engine.dll $(OutDir) /y</Command>
+      <Command>xcopy $(SolutionDir)lib\Engine.dll $(OutDir) /y /r
+xcopy $(SolutionDir)GLEW\dll\glew32.dll $(OutDir) /y /r
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

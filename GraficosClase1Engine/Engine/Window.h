@@ -1,7 +1,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-#include "Engine.h"
 #include "GLFW/glfw3.h"
+#include "Engine.h"
+#include "Renderer.h"
 #include <iostream>
 using namespace std;
 class Window
