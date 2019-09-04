@@ -1,7 +1,10 @@
 #include "Renderer.h"
 #include "../glm/glm/glm.hpp"
-
+#include "../glm/glm/gtc/matrix_transform.hpp"
+#include "../glm/glm/gtc/type_ptr.hpp"
+#include <chrono>
 using namespace std;
+
 float vertices[] = {
 	 0.0f,  0.5f, // Vertex 1 (X, Y)
 	 0.5f, -0.5f, // Vertex 2 (X, Y)
@@ -12,10 +15,10 @@ const char* vertexSource = R"glsl(
     #version 150 core
 
     in vec2 position;
-
+uniform mat4 trans;
     void main()
     {
-        gl_Position = vec4(position, 0.0, 1.0);
+        gl_Position = trans*vec4(position, 0.0, 1.0);
     }
 )glsl";
 const char* fragmentSource = R"glsl(
@@ -32,9 +35,15 @@ void main()
 GLuint vertexBuffer;
 GLuint vbo;
 GLuint vao;
+glm::mat4 trans;
+GLint uniTrans;
+GLuint shaderProgram;
 
+
+std::chrono::time_point<std::chrono::system_clock> then;
 Renderer::Renderer()
 {
+	then = std::chrono::system_clock::now();
 	glewInit();
 
 	glGenBuffers(1, &vertexBuffer);
@@ -55,7 +64,7 @@ Renderer::Renderer()
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);
 
-	GLuint shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
+	shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 
@@ -68,7 +77,8 @@ Renderer::Renderer()
 	//glUniform3f(uniColor, (sin()+0.5f);
 
 
-	//glm::
+
+		
 
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");		//ver si se puede camb pos por aca
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
@@ -78,11 +88,33 @@ Renderer::Renderer()
 
 
 }
+double TimeForward()
+{
+	typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::duration<float, std::milli> duration;
 
+	static clock::time_point start = clock::now();
+	duration elapsed = clock::now() - start;
+	return elapsed.count();
+}
+void SpinTriangle(int speed)
+{
+	trans = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
+	float t = TimeForward();
+	trans = glm::rotate(trans, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 1.0f));	//esto lo rota de entrada, ver como hacer en el loop desp
+	uniTrans = glGetUniformLocation(shaderProgram, "trans");					//le pasa al shader trans
+	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
+}
+void BackgroundColor() 
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			//con esto podemos cambiar el color del fondo
+}
 void Renderer::Draw(GLFWwindow* window)
 {
 	//gl clear
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			//con esto podemos cambiar el color del fondo
+	
+	SpinTriangle(1);
+	BackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	
