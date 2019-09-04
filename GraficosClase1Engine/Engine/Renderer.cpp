@@ -20,12 +20,12 @@ const char* vertexSource = R"glsl(
 )glsl";
 const char* fragmentSource = R"glsl(
    #version 150 core
-
+uniform vec3 triangleColor;
 out vec4 outColor;
 
 void main()
 {
-    outColor = vec4(1.0, 1.0, 1.0, 1.0);
+    outColor = vec4(triangleColor, 1.0);
 }
 )glsl";
 
@@ -58,11 +58,14 @@ Renderer::Renderer()
 	GLuint shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
+
 	glBindFragDataLocation(shaderProgram, 0, "outColor");
 
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
-
+	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
+	glUniform3f(uniColor, 1.0f, 1.0f, 0.0f);			//cambiar color aca
+	//glUniform3f(uniColor, (sin(+0.5f));
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");		//ver si se puede camb pos por aca
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
 	glEnableVertexAttribArray(posAttrib);
