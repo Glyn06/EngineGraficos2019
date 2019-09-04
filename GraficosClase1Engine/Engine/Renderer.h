@@ -1,5 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
+#include"glew.h"
+#include "GLFW/glfw3.h"
+#include "Window.h"
+#include <iostream>
 
 /*
 float position[6]
@@ -15,7 +19,7 @@ private:
 	
 public:
 	Renderer();
-	void Draw();
+	void Draw(GLFWwindow* windows);
 	~Renderer();
 };
 #endif

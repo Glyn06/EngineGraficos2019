@@ -1,3 +1,4 @@
+#include"Renderer.h"
 #include"glew.h"
 #include"GLFW/glfw3.h"
 #include "Engine.h"
@@ -8,7 +9,7 @@ void Engine::startGLFW()
 	if (!glfwInit())
 		cout << "Fallo al inicializar la libreria";
 
-	Window* wind = new Window(640, 480, "faaa");
+	Window* wind = new Window(640, 480, "Triangle  Engine");
 
 	GLFWwindow* window = wind->GetWindow();
 
@@ -20,12 +21,9 @@ void Engine::startGLFW()
 	{
 		/* Render here */
 
-		render->Draw();
-
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+		render->Draw(window);
+		
+		
 		
 		/* Poll for and process events */
 		glfwPollEvents();
