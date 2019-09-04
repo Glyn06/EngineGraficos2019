@@ -1,5 +1,5 @@
 #include "Renderer.h"
-
+#include "../glm/glm/glm.hpp"
 
 using namespace std;
 float vertices[] = {
@@ -65,7 +65,11 @@ Renderer::Renderer()
 	glUseProgram(shaderProgram);
 	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
 	glUniform3f(uniColor, 1.0f, 1.0f, 0.0f);			//cambiar color aca
-	//glUniform3f(uniColor, (sin(+0.5f));
+	//glUniform3f(uniColor, (sin()+0.5f);
+
+
+	//glm::
+
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");		//ver si se puede camb pos por aca
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
 	glEnableVertexAttribArray(posAttrib);
