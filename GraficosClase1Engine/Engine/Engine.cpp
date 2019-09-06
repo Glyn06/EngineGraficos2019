@@ -9,7 +9,7 @@ void Engine::startGLFW()
 	if (!glfwInit())
 		cout << "Fallo al inicializar la libreria";
 
-	Window* wind = new Window(640, 480, "Triangle  Engine");
+	Window* wind = new Window(640, 640, "Triangle  Engine");
 
 	GLFWwindow* window = wind->GetWindow();
 

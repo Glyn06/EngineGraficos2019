@@ -9,8 +9,18 @@ float vertices[] = {
 	 0.0f,  0.5f, // Vertex 1 (X, Y)
 	 0.5f, -0.5f, // Vertex 2 (X, Y)
 	-0.5f, -0.5f  // Vertex 3 (X, Y)
+
 };
 
+/*
+float vertices[] = {
+	 0.5f,  0.5f, // Vertex 1 (X, Y)
+	 0.5f, -0.5f, // Vertex 2 (X, Y)
+	-0.5f, -0.5f,  // Vertex 3 (X, Y)
+	-0.5f, 0.5f,
+	0.5f, 0.5f,
+	-0.5f, -0.5f
+};*/
 const char* vertexSource = R"glsl(
     #version 150 core
 
@@ -101,7 +111,7 @@ void SpinTriangle(int speed)
 {
 	trans = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	float t = TimeForward();
-	trans = glm::rotate(trans, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 1.0f));	//esto lo rota de entrada, ver como hacer en el loop desp
+	trans = glm::rotate(trans, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniTrans = glGetUniformLocation(shaderProgram, "trans");					//le pasa al shader trans
 	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
 }
@@ -116,7 +126,7 @@ void Renderer::Draw(GLFWwindow* window)
 	SpinTriangle(1);
 	BackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	
 
 	/* Swap front and back buffers */
@@ -131,3 +141,8 @@ Renderer::~Renderer()
 {
 	
 }
+/*
+
+
+
+*/
