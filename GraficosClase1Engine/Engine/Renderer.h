@@ -19,6 +19,9 @@ private:
 	
 public:
 	Renderer();
+	void DumbCodeTriangle();
+	void DumbCodeSquare();
+	void LoadShaders();
 	void Draw(GLFWwindow* windows);
 	~Renderer();
 };

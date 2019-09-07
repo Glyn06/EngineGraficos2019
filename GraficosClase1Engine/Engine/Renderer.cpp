@@ -5,22 +5,26 @@
 #include <chrono>
 using namespace std;
 
-float vertices[] = {
+float vertexTriangles[] = {
 	 0.0f,  0.5f, // Vertex 1 (X, Y)
 	 0.5f, -0.5f, // Vertex 2 (X, Y)
 	-0.5f, -0.5f  // Vertex 3 (X, Y)
 
 };
 
-/*
-float vertices[] = {
-	 0.5f,  0.5f, // Vertex 1 (X, Y)
-	 0.5f, -0.5f, // Vertex 2 (X, Y)
-	-0.5f, -0.5f,  // Vertex 3 (X, Y)
-	-0.5f, 0.5f,
-	0.5f, 0.5f,
-	-0.5f, -0.5f
-};*/
+
+float vertexSqare[] = {
+	 0.5f,  0.5f,	// Vertex 1 (X, Y)		0
+	 0.5f, -0.5f,	// Vertex 2 (X, Y)		1
+	-0.5f, -0.5f,	// Vertex 3 (X, Y)		2
+	-0.5f, 0.5f,	// Vertex 4 (X, Y)		3
+};
+GLuint squareIndex[] = {
+	0 , 1, 2,		// tirangulo derecho inferior
+	2, 3, 0
+};
+
+
 const char* vertexSource = R"glsl(
     #version 150 core
 
@@ -44,6 +48,7 @@ void main()
 
 GLuint vertexBuffer;
 GLuint vbo;
+unsigned int ElementBufferObject;
 GLuint vao;
 glm::mat4 trans;
 GLint uniTrans;
@@ -56,16 +61,53 @@ Renderer::Renderer()
 	then = std::chrono::system_clock::now();
 	glewInit();
 
-	glGenBuffers(1, &vertexBuffer);
 	
-	glGenBuffers(1, &vbo); 
+	//DumbCodeTriangle();
+	DumbCodeSquare();
+	
+
+
+}
+void Renderer::DumbCodeTriangle()
+{
+	glGenBuffers(1, &vertexBuffer);
+
+	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);									//genera 3 buffer; para verlos
 	glBindVertexArray(vao);										//los buffer los tiene que bindear
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexTriangles), vertexTriangles, GL_STATIC_DRAW);
+	LoadShaders();
 
-	//glsl ver
 
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	glEnableVertexAttribArray(posAttrib);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
+	
+}
+void Renderer::DumbCodeSquare()
+{
+	glGenBuffers(1, &vertexBuffer);
+
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);										//los buffer los tiene que bindear
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexSqare), vertexSqare, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ElementBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	//que vamos a "tocar", cuanto espacio vamos a usar, que usamos y la primitiva
+	LoadShaders();
+
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	glEnableVertexAttribArray(posAttrib);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), 0);			//es para leer desde donde empieza y cuantos atributos saltea
+	
+}
+void Renderer::LoadShaders() 
+{
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);	//lo carga con el source
 	glCompileShader(vertexShader);							//compila el vertex shader
@@ -84,19 +126,6 @@ Renderer::Renderer()
 	glUseProgram(shaderProgram);
 	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
 	glUniform3f(uniColor, 1.0f, 1.0f, 0.0f);			//cambiar color aca
-	//glUniform3f(uniColor, (sin()+0.5f);
-
-
-
-		
-
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");		//ver si se puede camb pos por aca
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
-	glEnableVertexAttribArray(posAttrib);
-
-
-
-
 }
 double TimeForward()
 {
@@ -115,21 +144,26 @@ void SpinTriangle(int speed)
 	uniTrans = glGetUniformLocation(shaderProgram, "trans");					//le pasa al shader trans
 	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
 }
-void BackgroundColor() 
+void BackgroundColor(float r, float g, float b) 
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			//con esto podemos cambiar el color del fondo
+	glClearColor(r, g, b, 1.0f);			//con esto podemos cambiar el color del fondo
 }
 void Renderer::Draw(GLFWwindow* window)
 {
-	//gl clear
 	
+	/*
 	SpinTriangle(1);
-	BackgroundColor();
+	BackgroundColor(0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
+	*/
 	
-
-	/* Swap front and back buffers */
+	SpinTriangle(0);
+	BackgroundColor(0.0f,1.0f,0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
+	
+	
 	
 	glfwSwapBuffers(window);
 
