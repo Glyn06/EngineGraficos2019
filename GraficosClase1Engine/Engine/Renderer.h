@@ -5,14 +5,7 @@
 #include "Window.h"
 #include <iostream>
 
-/*
-float position[6]
-{
-	-0.5f, -0.5f,
-	0.0f, -0.5f,
-	0.5f, -0.5f,
-};
-*/
+
 class Renderer
 {
 private:

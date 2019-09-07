@@ -13,7 +13,7 @@ float vertexTriangles[] = {
 };
 
 
-float vertexSqare[] = {
+GLfloat vertexSqare[] = {
 	 0.5f,  0.5f,	// Vertex 1 (X, Y)		0
 	 0.5f, -0.5f,	// Vertex 2 (X, Y)		1
 	-0.5f, -0.5f,	// Vertex 3 (X, Y)		2
@@ -46,7 +46,6 @@ void main()
 }
 )glsl";
 
-GLuint vertexBuffer;
 GLuint vbo;
 unsigned int ElementBufferObject;
 GLuint vao;
@@ -70,7 +69,7 @@ Renderer::Renderer()
 }
 void Renderer::DumbCodeTriangle()
 {
-	glGenBuffers(1, &vertexBuffer);
+
 
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);									//genera 3 buffer; para verlos
@@ -87,8 +86,6 @@ void Renderer::DumbCodeTriangle()
 }
 void Renderer::DumbCodeSquare()
 {
-	glGenBuffers(1, &vertexBuffer);
-
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);										//los buffer los tiene que bindear
@@ -101,10 +98,10 @@ void Renderer::DumbCodeSquare()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	//que vamos a "tocar", cuanto espacio vamos a usar, que usamos y la primitiva
 	LoadShaders();
 
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), 0);			//es para leer desde donde empieza y cuantos atributos saltea
-	
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");					//pos array apunta a donde esta la posicion en el "programa"
+	glEnableVertexAttribArray(posAttrib);												//
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);		//a donde, cuantas primitivas, que tipo de dato, false?, cuantos float usa cada primitva, cuanto te salteas			
+	//nota importante: el 2 de 2*sizeof.... en el tutorial era un 5 porque usaba 3 float mas para los colores al pedo!!!!
 }
 void Renderer::LoadShaders() 
 {
@@ -158,12 +155,11 @@ void Renderer::Draw(GLFWwindow* window)
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	*/
 	
-	SpinTriangle(0);
+	SpinTriangle(1);
 	BackgroundColor(0.0f,1.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
-	
-	
+
 	
 	glfwSwapBuffers(window);
 
