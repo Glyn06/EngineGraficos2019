@@ -8,7 +8,7 @@ void Engine::startGLFW()
 {
 	if (glewInit() != GLEW_OK)
 	{
-		cout << "error!" << endl;
+		//cout << "error!" << endl;
 	}
 	/* Initialize the library */
 	if (!glfwInit())

@@ -1,10 +1,9 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\WDExpress\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: El directorio Output no termina con una barra diagonal final. Esta instancia de compilación agregará la barra diagonal porque es necesaria para que se pueda evaluar correctamente el directorio Output.
   Engine.cpp
   Renderer.cpp
-c:\users\asplomer\desktop\workstuff\repo graficos\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(139): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\administrador\desktop\repogra\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(139): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
   Window.cpp
-  Generating Code...
-  LINK : C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll not found or not built by the last incremental link; performing full link
-     Creating library C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\lib\Engine.lib and object C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\lib\Engine.exp
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Engine.vcxproj -> C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
+  Generando código...
+     Creando biblioteca C:\Users\Administrador\Desktop\repogra\EngineGraficos2019\GraficosClase1Engine\lib\Engine.lib y objeto C:\Users\Administrador\Desktop\repogra\EngineGraficos2019\GraficosClase1Engine\lib\Engine.exp
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  Engine.vcxproj -> C:\Users\Administrador\Desktop\repogra\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
