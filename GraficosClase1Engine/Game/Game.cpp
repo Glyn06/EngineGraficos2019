@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Engine.h"
-
 using namespace std;
 /*
 	game includes Engine.dll from the other proyect
@@ -14,4 +13,10 @@ void main()
 	//prueba del dll que hice!
 	Engine e;
 	e.startGLFW();
+
+
+
+	
+	cin.get();
+
 }

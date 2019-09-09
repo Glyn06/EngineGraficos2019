@@ -1,17 +1,12 @@
 #ifndef RENDERER_H
 #define RENDERER_H
+#include"glew.h"
+#include "GLFW/glfw3.h"
+#include "Window.h"
+#include <iostream>
 
 #include <iostream>
 using namespace std;
-
-/*
-static const GLfloat g_vertex_buffer_data[] = {
-   -0.3f, -0.3f, 0.0f,
-   0.3f, -0.3f, 0.0f,
-   0.0f,  0.6f, 0.0f,
-};
-*/
-
 
 class Renderer
 {
@@ -19,7 +14,10 @@ private:
 	unsigned int _buffer;
 public:
 	Renderer();
-	void Draw();
+	void DumbCodeTriangle();
+	void DumbCodeSquare();
+	void LoadShaders();
+	void Draw(GLFWwindow* windows);
 	~Renderer();
 };
 #endif
