@@ -27,15 +27,17 @@ GLuint triangleIndex[] = {
 	0 , 1, 2,	
 };
 
-
+//translate * *scale
 const char* vertexSource = R"glsl(
     #version 150 core
 
     in vec2 position;
-uniform mat4 trans;
+uniform mat4 translate;
+uniform mat4 rotate;
+uniform mat4 scale;
     void main()
     {
-        gl_Position = trans*vec4(position, 0.0, 1.0);
+        gl_Position =  translate*(rotate*(scale* vec4(position, 0.0, 1.0)));
     }
 )glsl";
 const char* fragmentSource = R"glsl(
@@ -52,11 +54,15 @@ void main()
 GLuint vbo;
 unsigned int ElementBufferObject;
 GLuint vao;
-glm::mat4 trans;
-GLint uniTrans;
+glm::mat4 rotMatrix;
+GLint uniRot;
 GLuint shaderProgram;
-
-
+glm::mat4 scaleMatrix;
+glm::mat4 transMatrix;
+GLint uniTrans;
+GLint uniScale;
+glm::vec3 tMatrix;
+glm::vec3 sMatrix;
 std::chrono::time_point<std::chrono::system_clock> then;
 Renderer::Renderer()
 {
@@ -64,8 +70,8 @@ Renderer::Renderer()
 	glewInit();
 
 	
-	DumbCodeTriangle();
-	//DumbCodeSquare();
+	//DumbCodeTriangle();
+	DumbCodeSquare();
 	
 
 
@@ -129,7 +135,7 @@ void Renderer::LoadShaders()
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
 	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
-	glUniform3f(uniColor, 0.0f, 0.0f, 0.0f);			//cambiar color aca
+	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);			//cambiar color aca
 }
 double TimeForward()
 {
@@ -142,16 +148,34 @@ double TimeForward()
 }
 void SpinTriangle(int speed)
 {
-	trans = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
+	rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	float t = TimeForward();
-	trans = glm::rotate(trans, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
-	uniTrans = glGetUniformLocation(shaderProgram, "trans");					//le pasa al shader trans
-	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
+	rotMatrix = glm::rotate(rotMatrix, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
+	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
+	glUniformMatrix4fv(uniRot, 1, GL_FALSE, glm::value_ptr(rotMatrix));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
+	
 }
 void BackgroundColor(float r, float g, float b) 
 {
 	glClearColor(r, g, b, 1.0f);			//con esto podemos cambiar el color del fondo
 }
+
+void TranslateMatrix(glm::vec3 trans)
+{
+	transMatrix = glm::translate(glm::mat4(1.0f), trans);
+
+	uniTrans = glGetUniformLocation(shaderProgram, "translate");					
+	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(transMatrix));			
+}
+
+void ScaleMatrix(glm::vec3 scale)
+{
+	scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+
+	uniScale = glGetUniformLocation(shaderProgram, "scale");
+	glUniformMatrix4fv(uniScale, 1, GL_FALSE, glm::value_ptr(scaleMatrix));
+}
+
 void Renderer::Draw(GLFWwindow* window)
 {
 	
@@ -161,9 +185,12 @@ void Renderer::Draw(GLFWwindow* window)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	*/
-	
+	sMatrix = glm::vec3(0.75f,0.25f, 1.0f);
+	tMatrix = glm::vec3(0.5f, 0.5f, 0.0f);
+	TranslateMatrix(tMatrix);
+	ScaleMatrix(sMatrix);
 	SpinTriangle(1);
-	BackgroundColor(1.0f,1.0f,1.0f);
+	BackgroundColor(1.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
@@ -176,6 +203,8 @@ void Renderer::Draw(GLFWwindow* window)
 
 Renderer::~Renderer()
 {
+	
+	
 	glfwTerminate();
 }
 /*
