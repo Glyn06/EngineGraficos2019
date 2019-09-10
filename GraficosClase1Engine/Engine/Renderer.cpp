@@ -23,6 +23,9 @@ GLuint squareIndex[] = {
 	0 , 1, 2,		// tirangulo derecho inferior
 	2, 3, 0
 };
+GLuint triangleIndex[] = {
+	0 , 1, 2,	
+};
 
 
 const char* vertexSource = R"glsl(
@@ -61,8 +64,8 @@ Renderer::Renderer()
 	glewInit();
 
 	
-	//DumbCodeTriangle();
-	DumbCodeSquare();
+	DumbCodeTriangle();
+	//DumbCodeSquare();
 	
 
 
@@ -76,12 +79,16 @@ void Renderer::DumbCodeTriangle()
 	glBindVertexArray(vao);										//los buffer los tiene que bindear
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexTriangles), vertexTriangles, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ElementBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangleIndex), triangleIndex, GL_STATIC_DRAW);
 	LoadShaders();
 
 
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);			//es para leer desde donde empieza y cuantos atributos saltea
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);			//es para leer desde donde empieza y cuantos atributos saltea
 	
 }
 void Renderer::DumbCodeSquare()
@@ -122,7 +129,7 @@ void Renderer::LoadShaders()
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
 	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
-	glUniform3f(uniColor, 1.0f, 1.0f, 0.0f);			//cambiar color aca
+	glUniform3f(uniColor, 0.0f, 0.0f, 0.0f);			//cambiar color aca
 }
 double TimeForward()
 {
@@ -156,7 +163,7 @@ void Renderer::Draw(GLFWwindow* window)
 	*/
 	
 	SpinTriangle(1);
-	BackgroundColor(0.0f,1.0f,0.0f);
+	BackgroundColor(1.0f,1.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
