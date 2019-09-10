@@ -35,9 +35,12 @@ const char* vertexSource = R"glsl(
 uniform mat4 translate;
 uniform mat4 rotate;
 uniform mat4 scale;
+uniform mat4 view;
+uniform mat4 proj;
+
     void main()
     {
-        gl_Position =  translate*(rotate*(scale* vec4(position, 0.0, 1.0)));
+        gl_Position = proj*view* translate*rotate*scale* vec4(position, 0.0, 1.0);
     }
 )glsl";
 const char* fragmentSource = R"glsl(
@@ -54,15 +57,13 @@ void main()
 GLuint vbo;
 unsigned int ElementBufferObject;
 GLuint vao;
-glm::mat4 rotMatrix;
+
 GLint uniRot;
 GLuint shaderProgram;
-glm::mat4 scaleMatrix;
-glm::mat4 transMatrix;
-GLint uniTrans;
-GLint uniScale;
+
 glm::vec3 tMatrix;
 glm::vec3 sMatrix;
+
 std::chrono::time_point<std::chrono::system_clock> then;
 Renderer::Renderer()
 {
@@ -148,7 +149,7 @@ double TimeForward()
 }
 void SpinTriangle(int speed)
 {
-	rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
+	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	float t = TimeForward();
 	rotMatrix = glm::rotate(rotMatrix, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
@@ -162,18 +163,45 @@ void BackgroundColor(float r, float g, float b)
 
 void TranslateMatrix(glm::vec3 trans)
 {
-	transMatrix = glm::translate(glm::mat4(1.0f), trans);
+	glm::mat4 transMatrix = glm::translate(glm::mat4(1.0f), trans);
 
-	uniTrans = glGetUniformLocation(shaderProgram, "translate");					
+	GLint uniTrans = glGetUniformLocation(shaderProgram, "translate");
 	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(transMatrix));			
 }
 
 void ScaleMatrix(glm::vec3 scale)
 {
-	scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
 
-	uniScale = glGetUniformLocation(shaderProgram, "scale");
+	GLint uniScale = glGetUniformLocation(shaderProgram, "scale");
 	glUniformMatrix4fv(uniScale, 1, GL_FALSE, glm::value_ptr(scaleMatrix));
+}
+void movingRotatingAndScale()
+{
+
+	sMatrix = glm::vec3(0.75f, 0.25f, 1.0f);
+	tMatrix = glm::vec3(0.5f, 0.5f, 0.0f);
+	TranslateMatrix(tMatrix);
+	ScaleMatrix(sMatrix);
+	SpinTriangle(1);
+
+}
+void Direction()
+{
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(1.2f, 1.2f, 1.2f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 1.0f)
+	);			// esto es una direccion, la w queda en 0
+	GLint uniView = glGetUniformLocation(shaderProgram, "view");			//le pasamos eso al shader
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));			//a donde ?
+}
+void Projection()
+{
+
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);		//perspective of the camera
+	GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
+	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 }
 
 void Renderer::Draw(GLFWwindow* window)
@@ -185,11 +213,9 @@ void Renderer::Draw(GLFWwindow* window)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	*/
-	sMatrix = glm::vec3(0.75f,0.25f, 1.0f);
-	tMatrix = glm::vec3(0.5f, 0.5f, 0.0f);
-	TranslateMatrix(tMatrix);
-	ScaleMatrix(sMatrix);
-	SpinTriangle(1);
+	movingRotatingAndScale();
+	Direction();
+	Projection();
 	BackgroundColor(1.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
