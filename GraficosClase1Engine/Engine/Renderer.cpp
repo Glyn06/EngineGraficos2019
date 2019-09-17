@@ -154,7 +154,7 @@ void Renderer::SpinTriangle(int speed)
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	//float t = TimeForward();
 	rotatation += glm::vec2((float)speed, 0.0f);
- 	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
+ 	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x+45.0f), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
 	glUniformMatrix4fv(uniRot, 1, GL_FALSE, glm::value_ptr(rotMatrix));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
 	
@@ -183,13 +183,14 @@ void movingRotatingAndScale()
 {
 
 	sMatrix = glm::vec3(1.0f, 1.0f, 1.0f);
-	tMatrix = glm::vec3(0.0f, 0.0f, 0.0f);
+	tMatrix = glm::vec3(0.5f, 0.5f, 1.0f);
+	//lo esta moviendo en 0.5 en x y y porque la camara, el cuadrado estan rotados en 45 grados y esto lo mueve en esa direccion, hay que verlo
 	TranslateMatrix(tMatrix);
 	ScaleMatrix(sMatrix);
-	//SpinTriangle(0);
+	
 
 }
-void Scale()
+void Direction()
 {
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(1.0f, 1.0f, 1.0f),
@@ -199,10 +200,16 @@ void Scale()
 	GLint uniView = glGetUniformLocation(shaderProgram, "view");			//le pasamos eso al shader
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));			//a donde ?
 }
-void Projection()
+void Projection(bool perspective)
 {
 
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);		//perspective of the camera
+
+	glm::mat4 proj;
+	if (perspective)
+		proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);		//perspective of the camera
+	else {
+		proj= glm::ortho(-1.0, 1.0, 1.0, 0.0, 0.0, 10.0);	//de donde empieza el left y right(en -0.5/0.5 esta muy cerca y parece que es mas grande la escala)
+	}
 	GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 }
@@ -217,8 +224,9 @@ void Renderer::Draw(GLFWwindow* window)
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	*/
 	movingRotatingAndScale();
-	Scale();
-	Projection();
+	Direction();
+	bool perspective = false;
+	Projection(perspective);
 	BackgroundColor(1.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
