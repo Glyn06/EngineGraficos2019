@@ -6,7 +6,6 @@
 #include "Window.h"
 class EXPORTER Engine{
 private:
-
 public:
 	void startGLFW();
 };

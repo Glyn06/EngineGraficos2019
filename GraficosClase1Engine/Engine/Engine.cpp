@@ -4,8 +4,13 @@
 #include "Engine.h"
 #include "Renderer.h"
 using namespace std;
+Renderer* render;
+
+void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
+int rotate = 0;
 void Engine::startGLFW()
 {
+	
 	if (glewInit() != GLEW_OK)
 	{
 		//cout << "error!" << endl;
@@ -18,21 +23,41 @@ void Engine::startGLFW()
 
 	GLFWwindow* window = wind->GetWindow();
 
+	glfwSetKeyCallback(window, keyCallBack);
+
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	Renderer* render = new Renderer();
+	render = new Renderer();
+
 	/* Loop until the user closes the window */
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
-
+		render->SpinTriangle(0);
 		render->Draw(window);
 		
 		
 		
 		/* Poll for and process events */
+		
 		glfwPollEvents();
+
 	}
 
 	glfwTerminate();
+}
+
+void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	
+	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+
+		render->SpinTriangle(1);
+	}else
+	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+
+		render->SpinTriangle(-1);
+	}
 }

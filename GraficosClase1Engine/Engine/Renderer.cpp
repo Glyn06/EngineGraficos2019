@@ -26,7 +26,7 @@ GLuint squareIndex[] = {
 GLuint triangleIndex[] = {
 	0 , 1, 2,	
 };
-
+glm::vec2 rotatation = glm::vec2(0.0f, 0.0f);
 //translate * *scale
 const char* vertexSource = R"glsl(
     #version 150 core
@@ -69,7 +69,9 @@ Renderer::Renderer()
 {
 	then = std::chrono::system_clock::now();
 	glewInit();
-
+	
+	rotatation = glm::vec2(0.0f, 0.0f);
+	SpinTriangle(1);
 	
 	//DumbCodeTriangle();
 	DumbCodeSquare();
@@ -147,11 +149,12 @@ double TimeForward()
 	duration elapsed = clock::now() - start;
 	return elapsed.count();
 }
-void SpinTriangle(int speed)
+void Renderer::SpinTriangle(int speed)
 {
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
-	float t = TimeForward();
-	rotMatrix = glm::rotate(rotMatrix, glm::radians((0.0f+t/20)*speed), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
+	//float t = TimeForward();
+	rotatation += glm::vec2((float)speed, 0.0f);
+ 	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
 	glUniformMatrix4fv(uniRot, 1, GL_FALSE, glm::value_ptr(rotMatrix));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
 	
@@ -179,17 +182,17 @@ void ScaleMatrix(glm::vec3 scale)
 void movingRotatingAndScale()
 {
 
-	sMatrix = glm::vec3(0.75f, 0.25f, 1.0f);
-	tMatrix = glm::vec3(0.5f, 0.5f, 0.0f);
+	sMatrix = glm::vec3(1.0f, 1.0f, 1.0f);
+	tMatrix = glm::vec3(0.0f, 0.0f, 0.0f);
 	TranslateMatrix(tMatrix);
 	ScaleMatrix(sMatrix);
-	SpinTriangle(1);
+	//SpinTriangle(0);
 
 }
-void Direction()
+void Scale()
 {
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(1.2f, 1.2f, 1.2f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 0.0f, 1.0f)
 	);			// esto es una direccion, la w queda en 0
@@ -214,7 +217,7 @@ void Renderer::Draw(GLFWwindow* window)
 	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
 	*/
 	movingRotatingAndScale();
-	Direction();
+	Scale();
 	Projection();
 	BackgroundColor(1.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);

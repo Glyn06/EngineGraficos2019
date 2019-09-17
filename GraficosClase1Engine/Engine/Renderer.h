@@ -18,6 +18,8 @@ public:
 	void DumbCodeSquare();
 	void LoadShaders();
 	void Draw(GLFWwindow* windows);
+
+	void SpinTriangle(int speed);
 	~Renderer();
 };
 #endif
