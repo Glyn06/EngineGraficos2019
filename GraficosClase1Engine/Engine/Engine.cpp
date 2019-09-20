@@ -34,7 +34,7 @@ void Engine::startGLFW()
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
-		render->SpinTriangle(0);
+		render->SpinTriangle(0.0f);
 		render->Draw(window);
 		
 		
@@ -50,14 +50,36 @@ void Engine::startGLFW()
 
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	
+	float x = 0.0f;
+	float y = 0.0f;
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
 
-		render->SpinTriangle(1);
+		render->RotatationShape(1.0f);
 	}else
 	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
 
-		render->SpinTriangle(-1);
+		render->RotatationShape(-1.0f);
 	}
+
+	if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+		x -= 0.01f;
+	}
+	if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+		x += 0.01f;
+	}
+	if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+		y -= 0.01f;
+	}
+	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
+	{
+		y += 0.01f;
+	}
+
+	render->MovePositionShape(x, y);
+	
 }

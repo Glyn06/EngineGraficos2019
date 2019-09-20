@@ -6,6 +6,7 @@ Window::Window(int sWidth, int sHeight, const char* name)
 {
 	// aca estamos creando el window y si no se hace, tira un mensaje
 	window = glfwCreateWindow(sWidth, sHeight, name, NULL, NULL);
+	
 	if (!window)
 	{
 		glfwTerminate();
