@@ -1,7 +1,9 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: El directorio Output no termina con una barra diagonal final. Esta instancia de compilación agregará la barra diagonal porque es necesaria para que se pueda evaluar correctamente el directorio Output.
-  C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
+  C:\Users\Administrador\Desktop\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
   1 archivo(s) copiado(s)
-  C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
+  C:\Users\Administrador\Desktop\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
   1 archivo(s) copiado(s)
-     Creando biblioteca C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib y objeto C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
-  Game.vcxproj -> C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe
+  Game.cpp
+c:\users\administrador\desktop\enginegraficos2019\graficosclase1engine\game\game.cpp(12): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
+     Creando biblioteca C:\Users\Administrador\Desktop\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib y objeto C:\Users\Administrador\Desktop\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
+  Game.vcxproj -> C:\Users\Administrador\Desktop\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe

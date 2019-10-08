@@ -104,7 +104,6 @@ void Renderer::DumbCodeTriangle()
 }
 void Renderer::DumbCodeSquare()
 {
-	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);										//los buffer los tiene que bindear
 	glGenBuffers(1, &vbo);
