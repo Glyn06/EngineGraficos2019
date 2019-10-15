@@ -30,6 +30,7 @@ public:
 	void MovePositionShape(float x, float y);
 	void RotatationShape(float rot);
 
+	void DumbCodeSquareTextured();
 	void LoadTexture();
 	//void LoadTextureToShader();
 	~Renderer();

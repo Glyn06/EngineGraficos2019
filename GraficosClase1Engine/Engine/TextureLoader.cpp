@@ -35,7 +35,7 @@ glBindTexture(GL_TEXTURE_2D, texture);
 glBindVertexArray(VAO);
 
 */
-float texCoords[] = {
+float textureCoords[] = {
 	1.0f, 1.0f,  // top-right corner  
 	1.0f, 0.0f,  // lower-right corner
 	0.0f, 0.0f,   // lower-left corner
