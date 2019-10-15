@@ -2,7 +2,7 @@
   Engine.cpp
 c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\engine.cpp(37): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   Renderer.cpp
-c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(193): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(195): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   TextureLoader.cpp
   Window.cpp
   Generando código...

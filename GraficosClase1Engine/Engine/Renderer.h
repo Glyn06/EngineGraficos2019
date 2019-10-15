@@ -3,9 +3,10 @@
 #include"glew.h"
 #include "GLFW/glfw3.h"
 
-
-
+#include "../stb_image.h"
+//#include "TextureLoader.h"
 #include "Window.h"
+
 #include <iostream>
 
 
@@ -28,6 +29,9 @@ public:
 	void SpinTriangle(int speed);
 	void MovePositionShape(float x, float y);
 	void RotatationShape(float rot);
+
+	void LoadTexture();
+	//void LoadTextureToShader();
 	~Renderer();
 };
 #endif

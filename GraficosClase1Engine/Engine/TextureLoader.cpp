@@ -29,6 +29,11 @@ included, and basically loaded, dont know how it actually loads data without ref
 
 Generating Textures:
 here we bind the texture, happens first
+
+
+glBindTexture(GL_TEXTURE_2D, texture);
+glBindVertexArray(VAO);
+
 */
 float texCoords[] = {
 	1.0f, 1.0f,  // top-right corner  
@@ -36,7 +41,11 @@ float texCoords[] = {
 	0.0f, 0.0f,   // lower-left corner
 	0.0f, 1.0f		//top-left corner
 };
+/*
+glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+glEnableVertexAttribArray(2);
 
+*/
 TextureLoader::TextureLoader(char* n, int w, int h, int channels)
 {
 	width = w;
@@ -45,12 +54,20 @@ TextureLoader::TextureLoader(char* n, int w, int h, int channels)
 	name = n;
 
 	data = stbi_load(name, &width, &height, &nrChannels, 0);
+
+	
 }
-char* TextureLoader::GetTexture() 
+void TextureLoader::LoadTexture() 
+{
+	
+
+}
+void TextureLoader::LoadTextureToShader()
 {
 
-	return false;
+	stbi_image_free(data);
 }
+
 TextureLoader::~TextureLoader()
 {
 

@@ -29,7 +29,7 @@ GLuint triangleIndex[] = {
 glm::vec2 rotatation = glm::vec2(0.0f, 0.0f);
 //translate * *scale
 const char* vertexSource = R"glsl(
-    #version 150 core
+    #version 330 core
 
     in vec2 position;
 uniform mat4 translate;
@@ -38,16 +38,18 @@ uniform mat4 scale;
 uniform mat4 view;
 uniform mat4 proj;
 
+
     void main()
     {
         gl_Position = proj*view* translate*rotate*scale* vec4(position, 0.0, 1.0);
+		
     }
 )glsl";
 const char* fragmentSource = R"glsl(
-   #version 150 core
+   #version 330 core
 uniform vec3 triangleColor;
 out vec4 outColor;
-
+uniform vec2 textCoord;
 void main()
 {
     outColor = vec4(triangleColor, 1.0);
@@ -254,6 +256,33 @@ Renderer::~Renderer()
 	
 	
 	glfwTerminate();
+}
+void Renderer::LoadTexture()
+{
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+	glEnableVertexAttribArray(2);
 }
 /*
 
