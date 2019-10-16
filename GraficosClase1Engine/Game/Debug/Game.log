@@ -3,5 +3,7 @@
   1 archivo(s) copiado(s)
   C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
   1 archivo(s) copiado(s)
+  Game.cpp
+c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\game\game.cpp(19): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
      Creando biblioteca C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib y objeto C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
   Game.vcxproj -> C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe

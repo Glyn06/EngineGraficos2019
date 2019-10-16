@@ -1,6 +1,7 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: El directorio Output no termina con una barra diagonal final. Esta instancia de compilación agregará la barra diagonal porque es necesaria para que se pueda evaluar correctamente el directorio Output.
   Engine.cpp
 c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\engine.cpp(37): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+  Input.cpp
   Renderer.cpp
 c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(266): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   TextureLoader.cpp
