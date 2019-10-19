@@ -5,7 +5,7 @@
 #include "Renderer.h"
 using namespace std;
 Renderer* render;
-
+Input* inp;
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 int rotate = 0;
 void Engine::startGLFW()
@@ -28,7 +28,7 @@ void Engine::startGLFW()
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	render = new Renderer();
-
+	inp = new Input();
 	/* Loop until the user closes the window */
 	
 	while (!glfwWindowShouldClose(window))
@@ -46,40 +46,12 @@ void Engine::startGLFW()
 	}
 
 	glfwTerminate();
+	
+	delete inp, render;
 }
 
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	
-	float x = 0.0f;
-	float y = 0.0f;
-	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-
-		render->RotatationShape(1.0f);
-	}else
-	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-
-		render->RotatationShape(-1.0f);
-	}
-
-	if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		x -= 0.01f;
-	}
-	if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		x += 0.01f;
-	}
-	if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		y -= 0.01f;
-	}
-	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		y += 0.01f;
-	}
-
-	render->MovePositionShape(x, y);
-	
+	float* inputs =	inp->Inputs(key, action);
+	render->RotatationShape(inputs[0]);
+	render->MovePositionShape(inputs[1], inputs[2]);
 }
