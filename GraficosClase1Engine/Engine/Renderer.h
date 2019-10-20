@@ -4,7 +4,7 @@
 #include "GLFW/glfw3.h"
 
 #include "../stb_image.h"
-//#include "TextureLoader.h"
+#include "TextureLoader.h"
 #include "Window.h"
 
 #include <iostream>

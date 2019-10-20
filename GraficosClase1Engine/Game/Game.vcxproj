@@ -151,6 +151,9 @@ copy /y $(SolutionDir)GLEW\dll\x64\glew32.dll $(OutDir)</Command>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Textures\BlueLink.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,74 +1,37 @@
 #include "TextureLoader.h"
 
-//MAKE A FUNC THAT BINDS TEXTURE AND ANOTHER TO APPLY IT TO THE SHADER
-//when we load these, we need to add extra atribs
-/*
-
-
-*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);		
-*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);		
-//asigns the parameters for the load of textures, currently using x and y
-
-float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);	//this binds the colors from the vertexes, functions like the colors we use before
-
----
-*Texture Filtering:
-
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//we also asign more parameters that we will use near and far i believe. thus we use mipmap
-
-
-*Mipmap: we need to make the texture with mipmap (256*256) OR WE USE GENERATE MIPMAP(?)
-happens between loading everything and unloading it (?)
-
-Loading and creating textures:
-this and the unload happen last
-included, and basically loaded, dont know how it actually loads data without referencing it or binding it or anything (!!!)
-
-Generating Textures:
-here we bind the texture, happens first
-
-
-glBindTexture(GL_TEXTURE_2D, texture);
-glBindVertexArray(VAO);
-
-*/
-float textureCoords[] = {
-	1.0f, 1.0f,  // top-right corner  
-	1.0f, 0.0f,  // lower-right corner
-	0.0f, 0.0f,   // lower-left corner
-	0.0f, 1.0f		//top-left corner
-};
-/*
-glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
-glEnableVertexAttribArray(2);
-
-*/
-TextureLoader::TextureLoader(char* n, int w, int h, int channels)
+TextureLoader::TextureLoader(const std::string& n): width(0),height(0),nrChannels(0),_renderID(0)
 {
-	width = w;
-	height = h;
-	nrChannels = channels;
-	name = n;
+	stbi_set_flip_vertically_on_load(1);
+	data = stbi_load(n.c_str(), &width, &height, &nrChannels, 4); //El cuatro es por la cantidad de canales que queremos R G B y A
 
-	data = stbi_load(name, &width, &height, &nrChannels, 0);
+	glGenTextures(1, &_renderID);
+	glBindTexture(GL_TEXTURE_2D, _renderID);
 
-	
-}
-void TextureLoader::LoadTexture() 
-{
-	
+	//Estos cuatro parametros hay que especificarlos si o si porque sino nos sale una textura negra
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-}
-void TextureLoader::LoadTextureToShader()
-{
+	//Le pasamos la textura a OpenGL
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); //Asignamos la cantidad de memoria que va a ocupar nuestra textura y le pasamos nuestra data
+	Unbind();
 
-	stbi_image_free(data);
+	if (data)
+		stbi_image_free(data);
 }
 
 TextureLoader::~TextureLoader()
 {
+	glDeleteTextures(1, &_renderID);
+}
 
+void TextureLoader::TextureBind(unsigned int slot) {
+	glActiveTexture(GL_TEXTURE0 + slot);
+	glBindTexture(GL_TEXTURE_2D, _renderID);
+}
+
+void TextureLoader::Unbind() {
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
