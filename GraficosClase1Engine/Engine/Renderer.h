@@ -33,6 +33,10 @@ public:
 	void DumbCodeSquareTextured();
 	void LoadTexture();
 	//void LoadTextureToShader();
+
+	void LoadShaders2(GLfloat _vertex[]);	//shaders without color, it gets loaded in bind
+	void Bind(GLfloat _vertex[], int _arraySize);	//for shape also loads into shader
+	void Draw(GLfloat _vertex[], int _arraySize);	//no primitive needed to pass
 	~Renderer();
 };
 #endif
