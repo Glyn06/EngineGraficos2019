@@ -1,8 +1,11 @@
 #include "Renderer.h"
+
 #include "../glm/glm/glm.hpp"
 #include "../glm/glm/gtc/matrix_transform.hpp"
 #include "../glm/glm/gtc/type_ptr.hpp"
+
 #include <chrono>
+
 using namespace std;
 
 float vertexTriangles[] = {
@@ -99,8 +102,10 @@ glm::vec3 tMatrix;
 glm::vec3 sMatrix;
 
 std::chrono::time_point<std::chrono::system_clock> then;
+
 Renderer::Renderer()
 {
+	shape = new Shape(0);
 	then = std::chrono::system_clock::now();
 	glewInit();
 	x = 0.0f;
@@ -157,6 +162,7 @@ void Renderer::DumbCodeSquare()
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);		//a donde, cuantas primitivas, que tipo de dato, false?, cuantos float usa cada primitva, cuanto te salteas			
 	//nota importante: el 2 de 2*sizeof.... en el tutorial era un 5 porque usaba 3 float mas para los colores al pedo!!!!
 }
+/*
 void Renderer::DumbCodeSquareTextured()
 {
 	glGenVertexArrays(1, &vao);
@@ -210,7 +216,7 @@ void Renderer::DumbCodeSquareTextured()
 	glEnableVertexAttribArray(posAttrib);											
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 
-}
+}*/
 void Renderer::LoadShaders() 
 {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
@@ -242,11 +248,11 @@ double TimeForward()
 	duration elapsed = clock::now() - start;
 	return elapsed.count();
 }
-void Renderer::SpinTriangle(int speed)
+void Renderer::SpinTriangle(float speed)
 {
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	//float t = TimeForward();
-	rotatation += glm::vec2((float)speed, 0.0f);
+	rotatation += glm::vec2(speed, 0.0f);
  	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x+0.0f), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
 	glUniformMatrix4fv(uniRot, 1, GL_FALSE, glm::value_ptr(rotMatrix));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
@@ -374,7 +380,8 @@ void Renderer::LoadTexture()
 	height = 16;
 	nrChannels = 1;
 
-	unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
+	//unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
+	/*
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -382,13 +389,13 @@ void Renderer::LoadTexture()
 	}
 	else
 	{
-		//std::cout << "Failed to load texture" << std::endl;
+		
 	}
 
+	*/
 
 
-
-	stbi_image_free(data);
+	
 
 }
 void Renderer::Bind(GLfloat _vertex[], int _arraySize) 

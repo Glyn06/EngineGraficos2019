@@ -2,12 +2,18 @@
 #include"glew.h"
 #include"GLFW/glfw3.h"
 #include "Engine.h"
-#include "Renderer.h"
+
 using namespace std;
-Renderer* render;
+//class Render;
+
 Input* inp;
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 int rotate = 0;
+Renderer* render;
+Engine::Engine()
+{
+	//render = new Renderer();
+}
 void Engine::startGLFW()
 {
 	
@@ -17,7 +23,7 @@ void Engine::startGLFW()
 	}
 	/* Initialize the library */
 	if (!glfwInit())
-		cout << "Fallo al inicializar la libreria";
+		printf("Fallo al inicializar la libreria");
 
 	Window* wind = new Window(640, 640, "Triangle  Engine");
 

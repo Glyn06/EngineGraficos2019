@@ -1,10 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
-#include"glew.h"
-#include "GLFW/glfw3.h"
 
-#include "../stb_image.h"
-//#include "TextureLoader.h"
+#include "glew.h"
+#include "GLFW/glfw3.h"
+#include "Shape.h"
+
+
 #include "Window.h"
 
 #include <iostream>
@@ -19,6 +20,7 @@ private:
 	float x;
 	float y;
 	float rotat;
+	Shape* shape;
 public:
 	Renderer();
 	void DumbCodeTriangle();
@@ -26,11 +28,11 @@ public:
 	void LoadShaders();
 	void Draw(GLFWwindow* windows);
 	void movingRotatingAndScale();
-	void SpinTriangle(int speed);
+	void SpinTriangle(float speed);
 	void MovePositionShape(float x, float y);
 	void RotatationShape(float rot);
 
-	void DumbCodeSquareTextured();
+	//void DumbCodeSquareTextured();
 	void LoadTexture();
 	//void LoadTextureToShader();
 
