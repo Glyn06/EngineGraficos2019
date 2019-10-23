@@ -1,11 +1,11 @@
 
 #include "Shape.h"
 
-Shape::Shape(int _algo)
+Shape::Shape()
 {
-	algo = _algo;
+	
 
-	int width, height, nrChannels;
+	
 	width = 16;
 	height = 16;
 	nrChannels = 1;
@@ -18,6 +18,19 @@ Shape::Shape(int _algo)
 	sprite = new Sprite(texture, width, height, nrChannels, last);
 
 	delete[] texture;
+}
+unsigned char* Shape::GetSprite()
+{
+
+	return sprite->GetTexture();
+}
+int Shape::GetWidth()
+{
+	return width;
+}
+int Shape::GetHeight()
+{
+	return height;
 }
 Shape::~Shape() 
 {

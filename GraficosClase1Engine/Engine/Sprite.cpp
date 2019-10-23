@@ -1,5 +1,5 @@
 #include "Sprite.h"
-
+unsigned char* data;
 
 //MAKE A FUNC THAT BINDS TEXTURE AND ANOTHER TO APPLY IT TO THE SHADER
 //when we load these, we need to add extra atribs
@@ -49,6 +49,9 @@ glEnableVertexAttribArray(2);
 */
 Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
 {
+
+
+
 	width = _width;
 	height = _height;
 	nrChannels = _nrChannels;
@@ -64,7 +67,7 @@ Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
 		printf("loaded \n");
 	}
 
-	stbi_image_free(data);
+	//stbi_image_free(data);
 }
 void Sprite::LoadTexture()
 {
@@ -74,10 +77,13 @@ void Sprite::LoadTexture()
 void Sprite::LoadTextureToShader()
 {
 
-	stbi_image_free(data);
+	
 }
-
+unsigned char* Sprite::GetTexture()
+{
+	return data;
+}
 Sprite::~Sprite()
 {
-
+	stbi_image_free(data);
 }

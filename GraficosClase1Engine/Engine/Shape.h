@@ -10,9 +10,14 @@ class Shape
 private:
 	Sprite* sprite;
 	int algo;
+	int width, height, nrChannels;
 	//fooat con vertices, como tiene que leerlos (stride y ofset)
 public:
-	Shape(int _algo);
+	Shape();
+	unsigned char* GetSprite();
+	int GetWidth();
+	int GetHeight();
+	
 	~Shape();
 };
 #endif 

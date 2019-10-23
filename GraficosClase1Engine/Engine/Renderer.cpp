@@ -72,29 +72,26 @@ const char* fragmentSource = R"glsl(
    #version 330 core
 out vec4 outColor;
 
-in vec3 ourColor;
-in vec3 triangleColor;
-//in vec2 textCoord;
+//in vec3 triangleColor;
+uniform vec3 triangleColorOrig;
+in vec2 textCoord;
+uniform sampler2D ourTexture;
 
-//in vec3 outsColor		//<---
-
-
-//uniform sampler2D ourTexture;
 void main()
 {
-    //outColor = vec4(outsColor, 1.0);
-outColor = vec4(triangleColor, 1.0);
-//if(texture(ourColor), textCoord)) != null)
-	//outColor = texture(ourColor, textCoord)* outColor;
+
+//outcolor = texture(ourTexture,textCoord)  * vec4(triangleColorOrig,1.0);
+//outColor = vec4(triangleColor, 1.0);
+outColor = vec4(triangleColorOrig, 1.0);
 }
 )glsl";
 
 
-GLuint vbo;
-unsigned int ElementBufferObject;
-GLuint vao;
-unsigned int texture;
-unsigned int TextureBufferObject;
+unsigned int VBO;
+unsigned int EBO;
+unsigned int VAO;
+unsigned int ourTexture;
+
 GLint uniRot;
 GLuint shaderProgram;
 
@@ -105,7 +102,7 @@ std::chrono::time_point<std::chrono::system_clock> then;
 
 Renderer::Renderer()
 {
-	shape = new Shape(0);
+	shape = new Shape();
 	then = std::chrono::system_clock::now();
 	glewInit();
 	x = 0.0f;
@@ -117,7 +114,7 @@ Renderer::Renderer()
 	//DumbCodeTriangle();
 	//DumbCodeSquare();
 	//DumbCodeSquareTextured();
-	Bind(VertexSquare2, sizeof(VertexSquare2));
+	Bind(VertexSquare3, sizeof(VertexSquare3));
 
 }
 
@@ -125,14 +122,14 @@ void Renderer::DumbCodeTriangle()
 {
 
 
-	glGenBuffers(1, &vbo);
-	glGenVertexArrays(1, &vao);									//genera 3 buffer; para verlos
-	glBindVertexArray(vao);										//los buffer los tiene que bindear
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);									//genera 3 buffer; para verlos
+	glBindVertexArray(VAO);										//los buffer los tiene que bindear
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexTriangles), vertexTriangles, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ElementBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
+	glGenBuffers(1, &EBO);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangleIndex), triangleIndex, GL_STATIC_DRAW);
 
 	LoadShaders();
@@ -145,14 +142,14 @@ void Renderer::DumbCodeTriangle()
 }
 void Renderer::DumbCodeSquare()
 {
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);										//los buffer los tiene que bindear
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);										//los buffer los tiene que bindear
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexSqare), vertexSqare, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ElementBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
+	glGenBuffers(1, &EBO);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	//que vamos a "tocar", cuanto espacio vamos a usar, que usamos y la primitiva
 	
 	//LoadTexture();
@@ -235,8 +232,13 @@ void Renderer::LoadShaders()
 
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
+	
 	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
 	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);			//cambiar color aca
+	
+
+
+
 }
 
 double TimeForward()
@@ -333,7 +335,7 @@ void Renderer::Draw(GLFWwindow* window)
 	Projection(perspective);
 	BackgroundColor(0.0f,0.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	//glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, ourTexture);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
 	
@@ -353,32 +355,35 @@ void Renderer::RotatationShape(float rot)
 }
 Renderer::~Renderer()
 {
-	
-	
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);	
 	glfwTerminate();
 }
 void Renderer::LoadTexture()
 {
+	glGenTextures(1, &ourTexture);
+	glBindTexture(GL_TEXTURE_2D, ourTexture);
 
-	glGenBuffers(1, &TextureBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, TextureBufferObject);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	
-
-
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int width, height, nrChannels;
-	width = 16;
-	height = 16;
-	nrChannels = 1;
+	unsigned char *data = shape->GetSprite();
+	int width = shape->GetWidth();
+	int height = shape->GetHeight();
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
 
 	//unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
 	/*
@@ -409,77 +414,38 @@ void Renderer::Bind(GLfloat _vertex[], int _arraySize)
 		printf(" %f",				_vertex[3 + (5 * i * sizeof(float))]);
 		printf(" %f \n ",			_vertex[4 + (5 * i * sizeof(float))]);
 	}	//<<mal stride?
-	
 
 
 
-
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);										
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);										
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexSquare2), VertexSquare2, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ElementBufferObject);		
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
+	glGenBuffers(1, &EBO);		
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	
 
-	//LoadTexture();
+	LoadTexture();
 	LoadShaders2(_vertex);
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");					
 	glEnableVertexAttribArray(posAttrib);												
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
-	
-	/*GLint colAttrib = glGetAttribLocation(shaderProgram, "outsColor");
-	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2*sizeof(float)));*/
 
+	/*
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
 	glEnableVertexAttribArray(colAttrib);
 	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
+	*/
 	
-	/*
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
 	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(5*sizeof(float)));
-	*/
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(5*sizeof(float)));
+	
 
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 
-
-	/*
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, nrChannels;
-	width = 16;
-	height = 16;
-	nrChannels = 1;
-
-	unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		//std::cout << "Failed to load texture" << std::endl;
-	}
-
-
-
-
-	stbi_image_free(data);
-	*/
-	
 
 }
 void Renderer::Draw(GLfloat _vertex[], int _arraySize) 
@@ -488,6 +454,7 @@ void Renderer::Draw(GLfloat _vertex[], int _arraySize)
 }
 void Renderer::LoadShaders2(GLfloat _vertex[])
 {
+	
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);	//lo carga con el source
 	glCompileShader(vertexShader);							//compila el vertex shader
@@ -501,13 +468,16 @@ void Renderer::LoadShaders2(GLfloat _vertex[])
 	glAttachShader(shaderProgram, fragmentShader);
 
 	glBindFragDataLocation(shaderProgram, 0, "outColor");
-	//glBindFragDataLocation(shaderProgram, 0, "outsColor");
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
-	/*
-	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
+
+
+
+
+	
+	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColorOrig");
 	glUniform3f(uniColor, 1.0f, 0.0f, 1.0f);			//cambiar color aca
-	*/
+	
 
 }
 
