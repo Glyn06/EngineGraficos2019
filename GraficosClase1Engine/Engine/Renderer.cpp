@@ -7,7 +7,7 @@
 #include <chrono>
 
 using namespace std;
-
+//revisar view, revisar, proyection, 
 float vertexTriangles[] = {
 	 0.0f,  0.5f, // Vertex 1 (X, Y)
 	 0.5f, -0.5f, // Vertex 2 (X, Y)
@@ -22,7 +22,7 @@ GLfloat vertexSqare[] = {
 	-0.5f, -0.5f,	// Vertex 3 (X, Y)		2
 	-0.5f, 0.5f,	// Vertex 4 (X, Y)		3
 };
-GLuint squareIndex[] = {
+GLuint squareIndex[] = {	//index buffer
 	0 , 1, 2,		// tirangulo derecho inferior
 	2, 3, 0
 };
@@ -35,14 +35,8 @@ float texCoords[] = {
 	0.0f, 0.0f,   // lower-left corner
 	0.0f, 1.0f		//top-left corner
 };
-GLfloat VertexSquare2[] = {
-	
-	 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,		// Vertex 1 (X, Y, COLOR RGB) 0
-	 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,		// Vertex 2 (X, Y, COLOR RGB) 1
-	-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,	// Vertex 3 (X, Y, COLOR RGB) 2
-	-0.5f, 0.5f, 1.0f, 1.0f, 1.0f,	// Vertex 4 (X, Y, COLOR RGB) 3
-};
-GLfloat VertexSquare3[] = {
+
+GLfloat VertexSquare3[] = {	//vertex buffer
 	 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,		// Vertex 1 (X, Y, COLOR RGB, TEXTURE COORDS XY) 0
 	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,		// Vertex 2 (X, Y, COLOR RGB, TEXTURE COORDS XY) 1
 	-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,	// Vertex 3 (X, Y, COLOR RGB, TEXTURE COORDS XY) 2
@@ -53,7 +47,6 @@ glm::vec2 rotatation = glm::vec2(0.0f, 0.0f);
 //translate * *scale
 const char* vertexSource = R"glsl(
     #version 330 core
-
     in vec2 position;
 uniform mat4 translate;
 uniform mat4 rotate;
@@ -72,17 +65,17 @@ const char* fragmentSource = R"glsl(
    #version 330 core
 out vec4 outColor;
 
-//in vec3 triangleColor;
-uniform vec3 triangleColorOrig;
+in vec3 triangleColor;
+//uniform vec3 triangleColorOrig;
 in vec2 textCoord;
 uniform sampler2D ourTexture;
 
 void main()
 {
 
-//outcolor = texture(ourTexture,textCoord)  * vec4(triangleColorOrig,1.0);
-//outColor = vec4(triangleColor, 1.0);
-outColor = vec4(triangleColorOrig, 1.0);
+//outcolor = texture(ourTexture, textCoord) * vec4(triangleColorOrig,1.0);
+outColor = vec4(triangleColor, 1.0);
+//outColor = vec4(triangleColorOrig, 1.0);
 }
 )glsl";
 
@@ -159,61 +152,6 @@ void Renderer::DumbCodeSquare()
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);		//a donde, cuantas primitivas, que tipo de dato, false?, cuantos float usa cada primitva, cuanto te salteas			
 	//nota importante: el 2 de 2*sizeof.... en el tutorial era un 5 porque usaba 3 float mas para los colores al pedo!!!!
 }
-/*
-void Renderer::DumbCodeSquareTextured()
-{
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);										//los buffer los tiene que bindear
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexSqare), vertexSqare, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ElementBufferObject);		
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferObject);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	
-	glGenBuffers(1, &TextureBufferObject);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, TextureBufferObject);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-
-
-
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, nrChannels;
-	width = 16;
-	height = 16;
-	nrChannels = 1;
-
-	unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		//std::cout << "Failed to load texture" << std::endl;
-	}
-
-
-
-
-	stbi_image_free(data);
-	
-	LoadShaders();
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");					
-	glEnableVertexAttribArray(posAttrib);											
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-
-}*/
 void Renderer::LoadShaders() 
 {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
@@ -255,7 +193,7 @@ void Renderer::SpinTriangle(float speed)
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	//float t = TimeForward();
 	rotatation += glm::vec2(speed, 0.0f);
- 	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x+0.0f), glm::vec3(0.0f, 0.0f, 4.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
+ 	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x+0.0f), glm::vec3(0.0f, 0.0f, 1.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
 	glUniformMatrix4fv(uniRot, 1, GL_FALSE, glm::value_ptr(rotMatrix));				//agarra el trans, le indica cuantas matrices le pasamos, si le hacemos cambios antes de pasarselo, la convierte en un array de floats
 	
@@ -294,12 +232,12 @@ void Renderer::movingRotatingAndScale()
 	SpinTriangle(rotat);
 	rotat = 0;
 }
-void Direction()
+void View()
 {
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(0.0f, 1.0f, 1.0f),
+		glm::vec3(0.0f, 0.0f, -0.5f),
 		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f)
+		glm::vec3(0.0f, 1.0f, 0.0f)
 	);			// esto es una direccion, la w queda en 0
 	GLint uniView = glGetUniformLocation(shaderProgram, "view");			//le pasamos eso al shader
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));			//a donde ?
@@ -329,13 +267,14 @@ void Renderer::Draw(GLFWwindow* window)
 	*/
 	//movingRotatingAndScale();
 	
-	Direction();
+	View();
 
 	bool perspective = false;
 	Projection(perspective);
 	BackgroundColor(0.0f,0.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
 	
@@ -368,7 +307,7 @@ void Renderer::LoadTexture()
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	unsigned char *data = shape->GetSprite();
@@ -376,52 +315,58 @@ void Renderer::LoadTexture()
 	int height = shape->GetHeight();
 	if (data)
 	{
+		printf("loaded texture correctly\n");
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		printf( "Failed to load texture \n");
 	}
-
-
-	//unsigned char *data = stbi_load("../Textures/BlueLink.png", &width, &height, &nrChannels, 0);
-	/*
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		
-	}
-
-	*/
-
-
-	
 
 }
 void Renderer::Bind(GLfloat _vertex[], int _arraySize) 
 {
+	int stride = 7;
+	string xCoord = "";
+	string yCoord = "";
 	for (int i= 0; i < 4; i++)
 	{
 		printf("vec %i", i);
-		printf("position: %f",		_vertex[0 + (5 * i * sizeof(float))]);
-		printf(" %f",				_vertex[1 + (5 * i * sizeof(float))]);
-		printf(" color: %f",		_vertex[2 + (5 * i * sizeof(float))]);
-		printf(" %f",				_vertex[3 + (5 * i * sizeof(float))]);
-		printf(" %f \n ",			_vertex[4 + (5 * i * sizeof(float))]);
-	}	//<<mal stride?
-
-
+		printf("position: %f",		_vertex[0 + (stride* i )]);
+		printf(" %f",				_vertex[1 + (stride* i )]);
+		printf(" color: %f",		_vertex[2 + (stride* i )]);
+		printf(" %f",				_vertex[3 + (stride* i )]);
+		printf(" %f ",			_vertex[4 + (stride* i )]);
+		/*
+		if (_vertex[5 + (stride* i)] > 0.5)
+		{
+			xCoord = "derecha";
+		}
+		else 
+		{
+			
+			xCoord = "isquierda";
+		}
+		if (_vertex[6 + (stride* i)] < 0.5)
+		{
+			yCoord = "superior";
+		}
+		else { yCoord = "inferior"; }
+		
+		printf("Esquina %s ",yCoord);
+		printf("%s \n", xCoord);
+		*/
+		printf("Texture Coords %f", _vertex[5 + (stride* i)]);
+		printf(" %f \n ", _vertex[6+ (stride* i)]);
+	}	
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);										
+	
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexSquare2), VertexSquare2, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexSquare3), VertexSquare3, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);		
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -429,24 +374,19 @@ void Renderer::Bind(GLfloat _vertex[], int _arraySize)
 
 	LoadTexture();
 	LoadShaders2(_vertex);
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");					
-	glEnableVertexAttribArray(posAttrib);												
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
-
-	/*
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(posAttrib);
+	
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
+	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
-	*/
 	
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5*sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(5*sizeof(float)));
-	
 
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-
-
 }
 void Renderer::Draw(GLfloat _vertex[], int _arraySize) 
 {
@@ -474,10 +414,7 @@ void Renderer::LoadShaders2(GLfloat _vertex[])
 
 
 
-	
-	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColorOrig");
-	glUniform3f(uniColor, 1.0f, 0.0f, 1.0f);			//cambiar color aca
-	
+
 
 }
 

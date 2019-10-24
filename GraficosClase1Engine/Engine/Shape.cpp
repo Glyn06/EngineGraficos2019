@@ -6,11 +6,12 @@ Shape::Shape()
 	
 
 	
-	width = 16;
-	height = 16;
+	width = 840;
+	height = 680;
 	nrChannels = 1;
 	int last = 0;
-	string str = "../Textures/BlueLink.png";
+	//string str = "../Textures/BlueLink.png";
+	string str = "../Textures/LINKA2.jpg";
 	int len = str.length() + 1;
 	char *texture = new char[len];
 	strcpy_s(texture, len, str.c_str());
