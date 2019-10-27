@@ -73,9 +73,10 @@ uniform sampler2D ourTexture;
 void main()
 {
 
-//outcolor = texture(ourTexture, textCoord) * vec4(triangleColorOrig,1.0);
-outColor = vec4(triangleColor, 1.0);
-//outColor = vec4(triangleColorOrig, 1.0);
+
+outColor = texture(ourTexture, textCoord);
+//outColor = vec4(triangleColor, 1.0);
+
 }
 )glsl";
 
@@ -235,9 +236,9 @@ void Renderer::movingRotatingAndScale()
 void View()
 {
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(0.0f, 0.0f, -0.5f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f)
+		glm::vec3(0.0f, 0.5f, -0.5f),		// 0.5 at the second value makes it not stretch vertically, third value at -0.5 to be inside the frustum
+		glm::vec3(0.0f, 0.0f, 0.0f),		// dont know, wont touch
+		glm::vec3(0.0f, 1.0f, 0.0f)		// a -1 puts it up, outside of the screen, seems to be position of the camera? absolutely lost here
 	);			// esto es una direccion, la w queda en 0
 	GLint uniView = glGetUniformLocation(shaderProgram, "view");			//le pasamos eso al shader
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));			//a donde ?

@@ -8,28 +8,28 @@ float* Input::Inputs(int key, int action)
 
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		rot = 1.0f;
+		rot = -1.0f;
 	}
 	else
 	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		rot = -1.0f;
+		rot = 1.0f;
 	}
 	if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		x -= 0.01f;
+		x += 0.01f;
 	}
 	if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		x += 0.01f;
+		x -= 0.01f;
 	}
 	if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		y -= 0.01f;
+		y += 0.01f;
 	}
 	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
 	{
-		y += 0.01f;
+		y -= 0.01f;
 	}
 
 	posChange[0] = rot;
