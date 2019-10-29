@@ -240,6 +240,7 @@ Renderer::~Renderer()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);	
+	glDisable(GL_BLEND);
 	glfwTerminate();
 }
 void Renderer::LoadTexture()
@@ -313,6 +314,8 @@ void Renderer::Bind(GLfloat _vertex[], int _arraySize)
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6*sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 void Renderer::Draw(GLfloat _vertex[], int _arraySize) 
