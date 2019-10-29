@@ -15,39 +15,43 @@ float vertexTriangles[] = {
 
 };
 
-
+/*
 GLfloat vertexSqare[] = {
 	 0.5f,  0.5f,	// Vertex 1 (X, Y)		0
 	 0.5f, -0.5f,	// Vertex 2 (X, Y)		1
 	-0.5f, -0.5f,	// Vertex 3 (X, Y)		2
 	-0.5f, 0.5f,	// Vertex 4 (X, Y)		3
-};
+};*/
 GLuint squareIndex[] = {	//index buffer
 	0 , 1, 2,		// tirangulo derecho inferior
 	2, 3, 0
 };
 GLuint triangleIndex[] = {
 	0 , 1, 2,	
-};
+};/*
 float texCoords[] = {
 	1.0f, 1.0f,  // top-right corner  
 	1.0f, 0.0f,  // lower-right corner
 	0.0f, 0.0f,   // lower-left corner
 	0.0f, 1.0f		//top-left corner
-};
+};*/
 
 GLfloat VertexSquare3[] = {	//vertex buffer
-	 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,		// Vertex 1 (X, Y, COLOR RGB, TEXTURE COORDS XY) 0
-	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,		// Vertex 2 (X, Y, COLOR RGB, TEXTURE COORDS XY) 1
-	-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,	// Vertex 3 (X, Y, COLOR RGB, TEXTURE COORDS XY) 2
-	-0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,	// Vertex 4 (X, Y, COLOR RGB, TEXTURE COORDS XY) 3
+	 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f,		// Vertex 1 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 0
+	 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,		// Vertex 2 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 1
+	-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,	// Vertex 3 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 2
+	-0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,	// Vertex 4 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 3
 };
 
 glm::vec2 rotatation = glm::vec2(0.0f, 0.0f);
 //translate * *scale
 const char* vertexSource = R"glsl(
     #version 330 core
-    in vec2 position;
+out vec4 ourColor;
+out vec2 textureCoords;
+in vec4 triangleColor;
+in vec2 textCoord;
+in vec2 position;
 uniform mat4 translate;
 uniform mat4 rotate;
 uniform mat4 scale;
@@ -58,24 +62,24 @@ uniform mat4 proj;
     void main()
     {
         gl_Position = proj*view* translate*rotate*scale* vec4(position, 0.0, 1.0);
-		
+		textureCoords = textCoord;		
+		ourColor = triangleColor;
     }
 )glsl";
 const char* fragmentSource = R"glsl(
    #version 330 core
 out vec4 outColor;
 
-in vec3 triangleColor;
-//uniform vec3 triangleColorOrig;
-in vec2 textCoord;
+in vec4 ourColor;
+in vec2 textureCoords;
 uniform sampler2D ourTexture;
 
 void main()
 {
 
 
-outColor = texture(ourTexture, textCoord);
-//outColor = vec4(triangleColor, 1.0);
+outColor = texture(ourTexture, textureCoords);
+//outColor = ourColor;
 
 }
 )glsl";
@@ -103,80 +107,7 @@ Renderer::Renderer()
 	y = 0.0f;
 	rotat = 0.0f;
 	rotatation = glm::vec2(0.0f, 0.0f);
-	//SpinTriangle(0);
-	
-	//DumbCodeTriangle();
-	//DumbCodeSquare();
-	//DumbCodeSquareTextured();
 	Bind(VertexSquare3, sizeof(VertexSquare3));
-
-}
-
-void Renderer::DumbCodeTriangle()
-{
-
-
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);									//genera 3 buffer; para verlos
-	glBindVertexArray(VAO);										//los buffer los tiene que bindear
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexTriangles), vertexTriangles, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &EBO);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangleIndex), triangleIndex, GL_STATIC_DRAW);
-
-	LoadShaders();
-	
-
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);			//es para leer desde donde empieza y cuantos atributos saltea
-	
-}
-void Renderer::DumbCodeSquare()
-{
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);										//los buffer los tiene que bindear
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexSqare), vertexSqare, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &EBO);		//en vez de bindear vertices(VertexBufferObject), bindeamos elementos(ElementBufferObject)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);	//que vamos a "tocar", cuanto espacio vamos a usar, que usamos y la primitiva
-	
-	//LoadTexture();
-	LoadShaders();
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");					//pos array apunta a donde esta la posicion en el "programa"
-	glEnableVertexAttribArray(posAttrib);												//
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);		//a donde, cuantas primitivas, que tipo de dato, false?, cuantos float usa cada primitva, cuanto te salteas			
-	//nota importante: el 2 de 2*sizeof.... en el tutorial era un 5 porque usaba 3 float mas para los colores al pedo!!!!
-}
-void Renderer::LoadShaders() 
-{
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);	//lo carga con el source
-	glCompileShader(vertexShader);							//compila el vertex shader
-
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-	glCompileShader(fragmentShader);
-
-	shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-
-	glBindFragDataLocation(shaderProgram, 0, "outColor");
-
-	glLinkProgram(shaderProgram);								//linkean el "programa"
-	glUseProgram(shaderProgram);
-	
-	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
-	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);			//cambiar color aca
-	
-
-
 
 }
 
@@ -225,7 +156,7 @@ void Renderer::movingRotatingAndScale()
 
 
 	sMatrix = glm::vec3(1.0f, 1.0f, 1.0f);
-	tMatrix = glm::vec3(x, y , 1.0f);
+	tMatrix = glm::vec3(x, y , 0.5f);		//0.5 moves it to the middle of the screen
 	//lo esta moviendo en 0.5 en x y y porque la camara, el cuadrado estan rotados en 45 grados y esto lo mueve en esa direccion, hay que verlo
 	
 	TranslateMatrix(tMatrix);
@@ -235,11 +166,20 @@ void Renderer::movingRotatingAndScale()
 }
 void View()
 {
+	/*
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(0.0f, 0.5f, -0.5f),		// 0.5 at the second value makes it not stretch vertically, third value at -0.5 to be inside the frustum
-		glm::vec3(0.0f, 0.0f, 0.0f),		// dont know, wont touch
-		glm::vec3(0.0f, 1.0f, 0.0f)		// a -1 puts it up, outside of the screen, seems to be position of the camera? absolutely lost here
+		glm::vec3(0.0f, 1.0f, -0.5f),		// 1.0 at the second value makes it not stretch vertically, third value at -0.5 to be inside the frustum
+		glm::vec3(0.0f, 0.0f, 0.0f),		// wont touch
+		glm::vec3(0.0f, 1.0f, 0.0f)		// wont touch
 	);			// esto es una direccion, la w queda en 0
+	*/
+
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(0.0f, 1.0f, -0.5f),		// 1.0 at the second value makes it not stretch vertically, third value at -0.5 to be inside the frustum
+		glm::vec3(0.0f, 0.0f, 0.0f),		// wont touch
+		glm::vec3(0.0f, 1.0f, 0.0f)		// wont touch
+	);			// esto es una direccion, la w queda en 0
+
 	GLint uniView = glGetUniformLocation(shaderProgram, "view");			//le pasamos eso al shader
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));			//a donde ?
 }
@@ -288,6 +228,8 @@ void Renderer::MovePositionShape(float x, float y)
 {
 	this->x += x;
 	this->y += y;
+	printf("\n pos x: %f", this->x);
+	printf("pos y: %f", this->y);
 }
 void Renderer::RotatationShape(float rot)
 {
@@ -308,16 +250,17 @@ void Renderer::LoadTexture()
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);		//LINEAR
 	unsigned char *data = shape->GetSprite();
 	int width = shape->GetWidth();
 	int height = shape->GetHeight();
 	if (data)
 	{
 		printf("loaded texture correctly\n");
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		printf("Width: %i \n", width);
+		printf("Height: %i \n", height);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -328,7 +271,7 @@ void Renderer::LoadTexture()
 }
 void Renderer::Bind(GLfloat _vertex[], int _arraySize) 
 {
-	int stride = 7;
+	int stride = 8;
 	string xCoord = "";
 	string yCoord = "";
 	for (int i= 0; i < 4; i++)
@@ -336,30 +279,14 @@ void Renderer::Bind(GLfloat _vertex[], int _arraySize)
 		printf("vec %i", i);
 		printf("position: %f",		_vertex[0 + (stride* i )]);
 		printf(" %f",				_vertex[1 + (stride* i )]);
+
 		printf(" color: %f",		_vertex[2 + (stride* i )]);
 		printf(" %f",				_vertex[3 + (stride* i )]);
 		printf(" %f ",			_vertex[4 + (stride* i )]);
-		/*
-		if (_vertex[5 + (stride* i)] > 0.5)
-		{
-			xCoord = "derecha";
-		}
-		else 
-		{
-			
-			xCoord = "isquierda";
-		}
-		if (_vertex[6 + (stride* i)] < 0.5)
-		{
-			yCoord = "superior";
-		}
-		else { yCoord = "inferior"; }
+		printf(" %f ", _vertex[5 + (stride* i)]);
 		
-		printf("Esquina %s ",yCoord);
-		printf("%s \n", xCoord);
-		*/
-		printf("Texture Coords %f", _vertex[5 + (stride* i)]);
-		printf(" %f \n ", _vertex[6+ (stride* i)]);
+		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
+		printf("%f  \n" , _vertex[7 + (stride* i)]);
 	}	
 
 	glGenVertexArrays(1, &VAO);
@@ -376,18 +303,17 @@ void Renderer::Bind(GLfloat _vertex[], int _arraySize)
 	LoadTexture();
 	LoadShaders2(_vertex);
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(posAttrib);
 	
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
+	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(colAttrib);
 	
-	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5*sizeof(float)));
+	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6*sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
 
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 }
 void Renderer::Draw(GLfloat _vertex[], int _arraySize) 
 {
@@ -396,15 +322,15 @@ void Renderer::Draw(GLfloat _vertex[], int _arraySize)
 void Renderer::LoadShaders2(GLfloat _vertex[])
 {
 	
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);	//lo carga con el source
-	glCompileShader(vertexShader);							//compila el vertex shader
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	
+	glShaderSource(vertexShader, 1, &vertexSource, NULL);	
+	glCompileShader(vertexShader);							
 
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);
 
-	shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
+	shaderProgram = glCreateProgram();					
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 
