@@ -49,9 +49,6 @@ glEnableVertexAttribArray(2);
 */
 Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
 {
-
-
-
 	width = _width;
 	height = _height;
 	nrChannels = _nrChannels;

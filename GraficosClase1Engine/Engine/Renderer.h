@@ -3,8 +3,9 @@
 
 #include "glew.h"
 #include "GLFW/glfw3.h"
-#include "Shape.h"
 
+#include "Shape.h"
+#include "Entity.h"
 
 #include "Window.h"
 
@@ -20,12 +21,11 @@ private:
 	float x;
 	float y;
 	float rotat;
-	Shape* shape;
+	Entity* entity;
+	
+	//Shape* shape;
 public:
 	Renderer();
-	void DumbCodeTriangle();
-	void DumbCodeSquare();
-	void LoadShaders();
 	void Draw(GLFWwindow* windows);
 	void movingRotatingAndScale();
 	void SpinTriangle(float speed);
@@ -37,7 +37,7 @@ public:
 	//void LoadTextureToShader();
 
 	void LoadShaders2(GLfloat _vertex[]);	//shaders without color, it gets loaded in bind
-	void Bind(GLfloat _vertex[], int _arraySize);	//for shape also loads into shader
+	void Bind(GLfloat _vertex[], GLint _index[], int _vertexSize, int _indexSize);	//for shape also loads into shader
 	void Draw(GLfloat _vertex[], int _arraySize);	//no primitive needed to pass
 	~Renderer();
 };
