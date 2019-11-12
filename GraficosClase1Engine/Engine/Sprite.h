@@ -9,7 +9,7 @@ private:
 	int width, height, nrChannels, last;
 	char* name;
 	
-
+	//va a tener animaciones
 public:
 	Sprite(char* n, int w, int h, int channels, int _last);
 	void LoadTexture();

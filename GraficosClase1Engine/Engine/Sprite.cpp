@@ -66,7 +66,7 @@ Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
 
 	//stbi_image_free(data);
 }
-void Sprite::LoadTexture()
+void Sprite::LoadTexture()	//aca que textura le pasa el animation
 {
 
 
@@ -84,3 +84,4 @@ Sprite::~Sprite()
 {
 	stbi_image_free(data);
 }
+//update de sprite que cambia la imagen
