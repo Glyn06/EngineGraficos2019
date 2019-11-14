@@ -11,6 +11,10 @@ public:
 	void Init();
 	void Update();
 	void DeInit();
+	void Spin();
+	void Movement();
+
+
 	~Zelda();
 };
 #endif // !ZELDA_H

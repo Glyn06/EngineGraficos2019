@@ -18,9 +18,17 @@ void Zelda::Init()
 }
 void Zelda::Update()
 {
-
+	
 }
 void Zelda::DeInit()
+{
+
+}
+void Zelda::Spin()
+{
+
+}
+void Zelda::Movement()
 {
 
 }

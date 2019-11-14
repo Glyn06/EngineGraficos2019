@@ -6,9 +6,6 @@
 #include "glew.h"
 #include "GLFW/glfw3.h"
 
-#include "Shape.h"
-#include "Entity.h"
-
 #include "Window.h"
 
 #include <iostream>
@@ -23,7 +20,6 @@ private:
 	float x;
 	float y;
 	float rotat;
-	Entity* entity;
 	
 	//Shape* shape;
 public:

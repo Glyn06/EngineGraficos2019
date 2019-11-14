@@ -62,7 +62,8 @@ Sprite::Sprite(string _name, int _width, int _height, int _nrChannels, int _last
 	//int len = name.length() + 1;
 	int size = _name.length();
 	name = new char[size];
-	strcpy_s(name[size],_name);
+	
+	strcpy_s(name,size,_name.c_str());
 	
 	//strcpy_s(name, name, str.c_str());
 
