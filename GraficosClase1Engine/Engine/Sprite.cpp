@@ -36,24 +36,39 @@ glBindTexture(GL_TEXTURE_2D, texture);
 glBindVertexArray(VAO);
 
 */
+/*
 float textureCoords[] = {
 	1.0f, 1.0f,  // top-right corner  
 	1.0f, 0.0f,  // lower-right corner
 	0.0f, 0.0f,   // lower-left corner
 	0.0f, 1.0f		//top-left corner
-};
+};*/
 /*
 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 glEnableVertexAttribArray(2);
 
 */
-Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
+Sprite::Sprite(string _name, int _width, int _height, int _nrChannels, int _last)
 {
+	 
+
+
+
 	width = _width;
 	height = _height;
 	nrChannels = _nrChannels;
-	name = _name;
+	//name = _name;
 	last = _last;
+	//int len = name.length() + 1;
+	int size = _name.length();
+	name = new char[size];
+	strcpy_s(name[size],_name);
+	
+	//strcpy_s(name, name, str.c_str());
+
+
+	//printf("texture name = %s \n", texture);
+
 	data = stbi_load(name, &width, &height, &nrChannels, last);
 	if (data == nullptr)
 	{
@@ -63,16 +78,6 @@ Sprite::Sprite(char* _name, int _width, int _height, int _nrChannels, int _last)
 	{
 		printf("loaded \n");
 	}
-
-	//stbi_image_free(data);
-}
-void Sprite::LoadTexture()	//aca que textura le pasa el animation
-{
-
-
-}
-void Sprite::LoadTextureToShader()
-{
 
 	
 }

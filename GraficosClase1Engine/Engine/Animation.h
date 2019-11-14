@@ -1,15 +1,18 @@
 #ifndef  ANIMATION_H
 #define ANIMATION_H
-
+#ifndef EXPORTER
+#define EXPORTER _declspec(dllexport)
+#endif // !EXPORTER
 #include <iostream>
 using namespace std;
-class Animation {
+class EXPORTER Animation {
 private:
+	//esta el .h de animation en el aula virtual
 	struct Frame
 	{
-		float uvcoords1[8];	//u y v de cada esquina
+		float uvcoords[8];	//u y v de cada esquina
 	};
-	Frame* vectorFrames = new Frame[];			// atlas pointing to the last frame for use in collisions	4u y 4v
+	Frame* vectorFrames = new Frame;			// atlas pointing to the last frame for use in collisions	4u y 4v
 	int length;					// 4 frames for link
 	float /*(casteado a integer desp)*/ currentFrame;
 

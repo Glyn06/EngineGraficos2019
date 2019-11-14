@@ -1,5 +1,8 @@
 #ifndef INPUT_H
 #define INPUT_H
+#ifndef EXPORTER
+#define EXPORTER _declspec(dllexport)
+#endif // !EXPORTER
 //#include "Engine.h"
 #include<iostream>
 
@@ -16,7 +19,7 @@ using namespace std;
 #define GLFW_KEY_DOWN               264
 #define GLFW_KEY_UP                 265
 
-class Input {
+class EXPORTER Input {
 
 public:
 	float* Inputs(int key, int action);

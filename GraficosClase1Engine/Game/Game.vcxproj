@@ -150,6 +150,10 @@ copy /y $(SolutionDir)GLEW\dll\x64\glew32.dll $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Zelda.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Zelda.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

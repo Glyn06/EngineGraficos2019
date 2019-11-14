@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Engine.h"
+#include "Zelda.h"
+//#include "Engine.h"
 
 using namespace std;
 /*
@@ -40,8 +41,8 @@ if we touch something with input how does entity know how to move, via renderer?
 void main() 
 {
 	//prueba del dll que hice!
-	Engine e;
-	e.startGLFW();
+	Zelda* z = new Zelda();
+	//z->startGLFW();
 
 
 

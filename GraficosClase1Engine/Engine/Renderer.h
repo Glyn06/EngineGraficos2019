@@ -1,6 +1,8 @@
 #ifndef RENDERER_H
 #define RENDERER_H
-
+#ifndef EXPORTER
+#define EXPORTER _declspec(dllexport)
+#endif // !EXPORTER
 #include "glew.h"
 #include "GLFW/glfw3.h"
 
@@ -14,7 +16,7 @@
 
 using namespace std;
 
-class Renderer
+class EXPORTER Renderer
 {
 private:
 	unsigned int _buffer;

@@ -1,19 +1,23 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-#include "stb_image.h"
-//#include <iostream>
+#ifndef EXPORTER
+#define EXPORTER _declspec(dllexport)
+#endif // !EXPORTER
+
+#include "Entity.h"
+#include <iostream>
 using namespace std;
 
-class Sprite {
+class EXPORTER Sprite:Entity {
 private:
-	int width, height, nrChannels, last;
+
+
+	int nrChannels, last;
 	char* name;
-	
+	unsigned char* data;
 	//va a tener animaciones
 public:
-	Sprite(char* n, int w, int h, int channels, int _last);
-	void LoadTexture();
-	void LoadTextureToShader();
+	Sprite(string n, int w, int h, int channels, int _last);
 	unsigned char* GetTexture();
 	~Sprite();
 };

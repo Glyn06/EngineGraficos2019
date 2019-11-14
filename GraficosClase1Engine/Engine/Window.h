@@ -1,12 +1,15 @@
 #ifndef WINDOW_H
 #define WINDOW_H
+#ifndef EXPORTER
+#define EXPORTER _declspec(dllexport)
+#endif // !EXPORTER
 //#include"glew.h"
 #include "GLFW/glfw3.h"
 
 
 #include <iostream>
 using namespace std;
-class Window
+class EXPORTER Window
 {
 private:
 	GLFWwindow* window;

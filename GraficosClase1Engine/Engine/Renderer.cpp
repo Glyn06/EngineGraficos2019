@@ -42,7 +42,7 @@ void main()
 {
 
 
-outColor = texture(ourTexture, textureCoords);
+outColor = texture(ourTexture, textureCoords)* ourColor;
 //outColor = ourColor;
 
 }
@@ -66,16 +66,10 @@ Renderer::Renderer()
 {
 	entity = new Entity(SQUARE_SHAPE);
 	// ON THE GAME IN EXE PLOX
-	int width = 16;
-	int height = 16;
-	string str = "../Textures/BlueLink.png";
-	int nrChannels = 1;
-	int last = 0;
 
-	entity->LoadSpriteAtribs(str, width, height, nrChannels, last);
 	//
-	float* Vertex = entity->GetVertex();
-	int* index = entity->GetIndex();
+	float* Vertex = entity->GetVertexPointer();
+	int* index = entity->GetIndexPointer();
 	int vertNum = entity->GetVertexNum(0);
 	int indNum = entity->GetVertexNum(1);
 
@@ -194,7 +188,7 @@ void Renderer::Draw(GLFWwindow* window)
 
 	bool perspective = false;
 	Projection(perspective);
-	BackgroundColor(0.0f,0.0f,1.0f);
+	BackgroundColor(0.0f,1.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
 	glBindVertexArray(VAO);
