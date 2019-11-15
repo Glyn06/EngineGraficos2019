@@ -1,8 +1,11 @@
 #include "Entity.h"
 //float SquareV[] =
 
-
 Entity::Entity()
+{
+
+}
+Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last)
 {
 	//vertex 1
 	_vertex[0].x = 0.5f;		
@@ -51,6 +54,33 @@ Entity::Entity()
 
 	_vertexPointer = _vertex;
 	_indexPointer = _index;
+
+
+
+	width = _width;
+	height = _height;
+	nrChannels = _nrChannels;
+	last = _last;
+	int size = _path.length();
+	name = new char[size];
+	strcpy_s(name, size, _path.c_str());
+	data = stbi_load(name, &width, &height, &nrChannels, last);
+	if (data == nullptr)
+	{
+		printf("failed to load texture \n");
+	}
+	else
+	{
+		printf("loaded \n");
+	}
+}
+void Entity::Draw(Renderer& rend)
+{
+	rend.LoadTexture(data, width, height);
+	
+	
+	
+	rend.Bind(_vertexPointer, _indexPointer, _vertexN, _indexN);
 }
 
 /*
@@ -84,6 +114,10 @@ int Entity::GetWidth()
 int Entity::GetHeight()
 {
 	return height;
+}
+unsigned char* Entity::GetTexture()
+{
+	return data;
 }
 Entity::~Entity()
 {

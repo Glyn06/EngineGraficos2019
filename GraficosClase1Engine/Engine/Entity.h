@@ -4,18 +4,10 @@
 #define EXPORTER _declspec(dllexport)
 #endif // !EXPORTER
 #include "stb_image.h"
-/*
-#include "Sprite.h"
-#include "Shape.h"
-*/
-
+#include "Renderer.h"
+#include <iostream>
+#include <string.h>
 using namespace std;
-struct Vertex
-{
-	float x, y;
-	float r, g, b, a;
-	float u, v;
-};
 
 class EXPORTER Entity
 {
@@ -27,16 +19,22 @@ protected:
 	int* _indexPointer;
 
 	int width, height;
+	int nrChannels, last;
+	char* name;
+	unsigned char* data;
 public:
-
 	Entity();
+	Entity(string _name, int _width, int _height, int _nrChannels, int _last);
+	void Draw(Renderer& rend);
 	//unsigned char* GetSprite();
 	//void LoadSpriteAtribs(string str, int _width, int _height, int channels, int last);
 	Vertex* GetVertexPointer();
 	int* GetIndexPointer();
 	int GetWidth();
 	int GetHeight();
+	unsigned char* GetTexture();
 	~Entity();
+
 };
 
 

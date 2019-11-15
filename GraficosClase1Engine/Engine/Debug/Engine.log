@@ -4,17 +4,11 @@
   Entity.cpp
   Input.cpp
   Renderer.cpp
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(67): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(67): error C2061: error de sintaxis: identificador 'Entity'
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(71): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(72): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(73): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(74): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(232): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(233): error C2065: 'entity': identificador no declarado
-c:\users\718\desktop\repo\enginegraficos2019\graficosclase1engine\engine\renderer.cpp(234): error C2065: 'entity': identificador no declarado
   Shape.cpp
   Sprite.cpp
   stb_image.cpp
   Window.cpp
   Generando código...
+     Creando biblioteca C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\lib\Engine.lib y objeto C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\lib\Engine.exp
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  Engine.vcxproj -> C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll

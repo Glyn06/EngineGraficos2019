@@ -64,6 +64,7 @@ std::chrono::time_point<std::chrono::system_clock> then;
 
 Renderer::Renderer()
 {
+	/*
 	entity = new Entity(SQUARE_SHAPE);
 	// ON THE GAME IN EXE PLOX
 
@@ -72,17 +73,17 @@ Renderer::Renderer()
 	int* index = entity->GetIndexPointer();
 	int vertNum = entity->GetVertexNum(0);
 	int indNum = entity->GetVertexNum(1);
-
+	*/
 	//shape = new Shape();
 	then = std::chrono::system_clock::now();
-	glewInit();
+	//glewInit();
 	x = 0.0f;
 	y = 0.0f;
 	rotat = 0.0f;
 	rotatation = glm::vec2(0.0f, 0.0f);
 	//this should go here
 	//********************************************************************************
-	Bind(Vertex, index, vertNum, indNum);		//<---this should get called after we recieve this from the entity which should do what shape does
+	//Bind(Vertex, index, vertNum, indNum);		//<---this should get called after we recieve this from the entity which should do what shape does
 													//while the vertexes get loaded in SHAPE (to know if we are drawing a square or whatever)
 	//********************************************************************************
 }
@@ -219,8 +220,10 @@ Renderer::~Renderer()
 	glDisable(GL_BLEND);
 	glfwTerminate();
 }
-void Renderer::LoadTexture()
+void Renderer::LoadTexture(unsigned char* data, int width, int height)
 {
+
+		//, int width, int height
 	glGenTextures(1, &ourTexture);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
 
@@ -229,9 +232,6 @@ void Renderer::LoadTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);		//LINEAR
-	unsigned char *data = entity->GetSprite();
-	int width = entity->GetWidth();
-	int height = entity->GetHeight();
 	if (data)
 	{
 		printf("loaded texture correctly\n");
@@ -246,8 +246,16 @@ void Renderer::LoadTexture()
 	}
 
 }
-void Renderer::Bind(GLfloat _vertex[], GLint _index[], int _vertexSize, int _indexSize)
+void Renderer::Bind(Vertex* vertexBuffer, GLint _index[], int _vertexSize, int _indexSize)
 {
+	GLfloat _vertex[] = {
+	vertexBuffer[0].x , vertexBuffer[0].y , vertexBuffer[0].r, vertexBuffer[0].g, vertexBuffer[0].b, vertexBuffer[0].a, vertexBuffer[0].u, vertexBuffer[0].v,
+	vertexBuffer[1].x , vertexBuffer[1].y , vertexBuffer[1].r, vertexBuffer[1].g, vertexBuffer[1].b, vertexBuffer[1].a, vertexBuffer[1].u, vertexBuffer[1].v,
+	vertexBuffer[2].x , vertexBuffer[2].y , vertexBuffer[2].r, vertexBuffer[2].g, vertexBuffer[2].b, vertexBuffer[2].a, vertexBuffer[2].u, vertexBuffer[2].v,
+	vertexBuffer[3].x , vertexBuffer[3].y , vertexBuffer[3].r, vertexBuffer[3].g, vertexBuffer[3].b, vertexBuffer[3].a, vertexBuffer[3].u, vertexBuffer[3].v
+	};
+
+	/*
 	int stride = 8;
 	string xCoord = "";
 	string yCoord = "";
@@ -264,7 +272,7 @@ void Renderer::Bind(GLfloat _vertex[], GLint _index[], int _vertexSize, int _ind
 		
 		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
 		printf("%f  \n" , _vertex[7 + (stride* i)]);
-	}	
+	}	*/
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);										
 	
@@ -273,14 +281,14 @@ void Renderer::Bind(GLfloat _vertex[], GLint _index[], int _vertexSize, int _ind
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, _vertexSize, _vertex, GL_STATIC_DRAW);
-
+	
 	//squareIndex
 	//_index
 	glGenBuffers(1, &EBO);		
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexSize, _index, GL_STATIC_DRAW);
 
-	LoadTexture();
+	
 	LoadShaders2(_vertex);
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
@@ -297,10 +305,12 @@ void Renderer::Bind(GLfloat _vertex[], GLint _index[], int _vertexSize, int _ind
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 }
-void Renderer::Draw(GLfloat _vertex[], int _arraySize) 
+/*void Renderer::BindEntityData(Vertex* vertexBuffer, int* indexBuffer, int verN, int indN)
 {
+	
 
-}
+	Bind(vert, indexBuffer, verN, indN);
+}*/
 void Renderer::LoadShaders2(GLfloat _vertex[])
 {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	

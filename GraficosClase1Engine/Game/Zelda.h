@@ -3,6 +3,8 @@
 #include "Engine.h"
 #include "Sprite.h"
 #include "Shape.h"
+
+
 #include <iostream>
 using namespace std;
 class Zelda : public Engine {
@@ -13,7 +15,7 @@ public:
 	void DeInit();
 	void Spin();
 	void Movement();
-
+	//en window y en renderer estoy usando glfw
 
 	~Zelda();
 };
