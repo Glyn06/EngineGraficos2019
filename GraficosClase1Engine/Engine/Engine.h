@@ -7,7 +7,6 @@
 
 #include "Input.h"
 #include "Window.h"
-//#include "Renderer.h";
 
 //class Renderer;
 class EXPORTER Engine{

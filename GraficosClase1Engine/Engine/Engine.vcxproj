@@ -162,6 +162,7 @@
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Utilis.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

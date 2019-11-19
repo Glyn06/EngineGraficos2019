@@ -3,8 +3,7 @@
 #ifndef EXPORTER
 #define EXPORTER _declspec(dllexport)
 #endif // !EXPORTER
-//#include"glew.h"
-#include "GLFW/glfw3.h"
+#include "Utilis.h"
 
 
 #include <iostream>

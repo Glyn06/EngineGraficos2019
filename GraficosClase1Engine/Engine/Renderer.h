@@ -3,11 +3,12 @@
 #ifndef EXPORTER
 #define EXPORTER _declspec(dllexport)
 #endif // !EXPORTER
-#include "glew.h"
-#include "GLFW/glfw3.h"
+
+
 
 #include "Window.h"
 #include <iostream>
+
 struct Vertex {
 	float x, y;
 	float r, g, b, a;

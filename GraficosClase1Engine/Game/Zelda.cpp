@@ -1,5 +1,5 @@
 #include "Zelda.h"
-
+//renderer se incluye en: entity.h, engine.cpp (.h comentado), renderer.cpp
 Zelda::Zelda()
 {
 	startGLFW();
