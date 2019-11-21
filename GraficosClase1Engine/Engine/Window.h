@@ -3,21 +3,22 @@
 #ifndef EXPORTER
 #define EXPORTER _declspec(dllexport)
 #endif // !EXPORTER
-#include "Utilis.h"
-
+//#include "glew.h"
+//#include "GLFW/glfw3.h"	
 
 #include <iostream>
 using namespace std;
 class EXPORTER Window
 {
 private:
-	GLFWwindow* window;
-
+	//GLFWwindow* window;
+	void* window;
 public:
 	Window(int sWidth, int sHeight, const char* name);
 	void WindowOpen();
 	void WindowClose();
-	GLFWwindow* GetWindow();
+	//GLFWwindow* GetWindow();
+	const void* GetWindow() { return (const void*)window; }
 	~Window();
 };
 #endif

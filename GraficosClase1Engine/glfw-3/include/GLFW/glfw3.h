@@ -181,8 +181,6 @@ extern "C" {
 
  #else /*__APPLE__*/
 
-  #include <GL/glcorearb.h>
-
  #endif /*__APPLE__*/
 
 #elif !defined(GLFW_INCLUDE_NONE)

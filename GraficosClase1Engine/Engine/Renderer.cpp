@@ -1,5 +1,7 @@
 #include "Renderer.h"
-#include "Utilis.h"
+//#include "Utilis.h"
+#include "glew.h"
+#include "GLFW/glfw3.h"
 #include "../glm/glm/glm.hpp"
 #include "../glm/glm/gtc/matrix_transform.hpp"
 #include "../glm/glm/gtc/type_ptr.hpp"
@@ -174,7 +176,7 @@ void Projection(bool perspective)
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 }
 
-void Renderer::Draw(GLFWwindow* window)
+void Renderer::Draw()
 {
 	
 	/*
@@ -188,6 +190,7 @@ void Renderer::Draw(GLFWwindow* window)
 	View();
 
 	bool perspective = false;
+
 	Projection(perspective);
 	BackgroundColor(0.0f,1.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -196,7 +199,7 @@ void Renderer::Draw(GLFWwindow* window)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
 	
-	glfwSwapBuffers(window);
+	glfwSwapBuffers((GLFWwindow*)window);
 
 	movingRotatingAndScale();
 	
@@ -246,7 +249,7 @@ void Renderer::LoadTexture(unsigned char* data, int width, int height)
 	}
 
 }
-void Renderer::Bind(Vertex* vertexBuffer, GLint _index[], int _vertexSize, int _indexSize)
+void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
 {
 	GLfloat _vertex[] = {
 	vertexBuffer[0].x , vertexBuffer[0].y , vertexBuffer[0].r, vertexBuffer[0].g, vertexBuffer[0].b, vertexBuffer[0].a, vertexBuffer[0].u, vertexBuffer[0].v,
@@ -311,7 +314,7 @@ void Renderer::Bind(Vertex* vertexBuffer, GLint _index[], int _vertexSize, int _
 
 	Bind(vert, indexBuffer, verN, indN);
 }*/
-void Renderer::LoadShaders2(GLfloat _vertex[])
+void Renderer::LoadShaders2(float _vertex[])
 {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);	

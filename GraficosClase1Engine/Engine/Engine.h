@@ -7,15 +7,16 @@
 
 #include "Input.h"
 #include "Window.h"
-
+#include "Renderer.h"
 //class Renderer;
 class EXPORTER Engine{
 private:
-	
+	Window* window;
+	int n = 0;
 public:
 	Engine(); 
 	virtual void Init()=0;
-	void Loop(GLFWwindow* window);
+	void Loop();
 	virtual void Update()=0;
 	virtual void DeInit()=0;
 	void startGLFW();

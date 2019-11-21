@@ -4,11 +4,9 @@
 #define EXPORTER _declspec(dllexport)
 #endif // !EXPORTER
 #include "Entity.h"
-#include<iostream>
+#include <iostream>
 using namespace std;
 //class Sprite;
-#define	TRIANGLE_SHAPE	3
-#define	SQUARE_SHAPE	4
 
 
 

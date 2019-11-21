@@ -1,6 +1,11 @@
-#include "Renderer.h"
 
-#include "Utilis.h"
+
+//#include "Utilis.h"
+
+	#include "glew.h"
+	#include "GLFW/glfw3.h"
+
+
 #include "Engine.h"
 
 using namespace std;
@@ -16,41 +21,42 @@ Engine::Engine()
 }
 void Engine::startGLFW()
 {
-	
-	if (glewInit() != GLEW_OK)
-	{
-		//cout << "error!" << endl;
-	}
-	/* Initialize the library */
 	if (!glfwInit())
 		printf("Fallo al inicializar la libreria");
 
-	Window* wind = new Window(640, 640, "Triangle  Engine");
+	window = new Window(640, 640, "Triangle  Engine");
+	//(GLFWwindow*)
+//	GLFWwindow* Glwindow = (GLFWwindow*)window->GetWindow();
 
-	GLFWwindow* window = wind->GetWindow();
-
-	glfwSetKeyCallback(window, keyCallBack);
+	glfwSetKeyCallback((GLFWwindow*)window->GetWindow(), keyCallBack);
 
 	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent((GLFWwindow*)window->GetWindow());
+
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK)
+	{
+		cout << "error!" << endl;	//<---
+	}
+	/* Initialize the library */
+	
 	render = new Renderer();
 	inp = new Input();
-	Loop(window);
-	
-
-	
-
+	Loop();
 }
-void Engine::Loop(GLFWwindow* window)
+
+void Engine::Loop()
 {
 	Init();
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose((GLFWwindow*)window->GetWindow()))
 	{
 		
 		/* Render here */
 		render->SpinTriangle(0.0f);
-		render->Draw(window);
+		printf("frame: %i", n);
+		n++;
+		render->Draw();
 
 
 
