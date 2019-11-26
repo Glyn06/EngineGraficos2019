@@ -5,15 +5,12 @@
 #endif // !EXPORTER
 
 
-
+#include "Shape.h"
+#include "Sprite.h"
 #include "Window.h"
 #include <iostream>
 
-struct Vertex {
-	float x, y;
-	float r, g, b, a;
-	float u, v;
-};
+
 
 using namespace std;
 class EXPORTER Renderer
@@ -26,6 +23,8 @@ private:
 	Window* window;
 	//Shape* shape;
 public:
+
+
 	Renderer();
 	void Draw();
 	void movingRotatingAndScale();
@@ -34,7 +33,8 @@ public:
 	void RotatationShape(float rot);
 
 	//void DumbCodeSquareTextured();
-	void LoadTexture(unsigned char* data, int width, int height);
+	void LoadTexture(Entity* ent);
+	
 	//void LoadTextureToShader();
 
 	void LoadShaders2(float _vertex[]);	//shaders without color, it gets loaded in bind

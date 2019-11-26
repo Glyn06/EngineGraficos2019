@@ -14,7 +14,7 @@ using namespace std;
 Input* inp;
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 int rotate = 0;
-Renderer* render;
+
 Engine::Engine()
 {
 	//render = new Renderer();
@@ -56,6 +56,8 @@ void Engine::Loop()
 		render->SpinTriangle(0.0f);
 		printf("frame: %i", n);
 		n++;
+		
+		Update();
 		render->Draw();
 
 
@@ -75,7 +77,7 @@ Engine::~Engine()
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	float* inputs =	inp->Inputs(key, action);
-	render->RotatationShape(inputs[0]);
-	render->MovePositionShape(inputs[1], inputs[2]);
+	//render->RotatationShape(inputs[0]);
+	//render->MovePositionShape(inputs[1], inputs[2]);
 
 }

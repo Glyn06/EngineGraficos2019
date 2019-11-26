@@ -12,17 +12,24 @@ void Zelda::Init()
 	int nrChannels = 1;
 	int last = 0;
 
-	Sprite* Link = new Sprite(str, width, height, nrChannels, last);
-	
-	
+	Link = new Sprite(str, width, height, nrChannels, last);
+	Link->LoadAtribs(str, width, height, nrChannels, last);
+	render->Bind(Link->GetVertexPointer(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 }
 void Zelda::Update()
 {
+	//render->Bind(Link->GetVertexPointer(),Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	//render->LoadTexture();
 	
+	render->LoadTexture(Link);
+	
+	
+	//Link->Draw(*render);
+
 }
 void Zelda::DeInit()
 {
-
+	
 }
 void Zelda::Spin()
 {

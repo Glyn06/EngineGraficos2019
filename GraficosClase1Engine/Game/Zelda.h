@@ -3,11 +3,17 @@
 #include "Engine.h"
 #include "Sprite.h"
 //#include "Shape.h"
-
+/*	struct Vertex {
+		float x, y;
+		float r, g, b, a;
+		float u, v;
+	};*/
 
 #include <iostream>
 using namespace std;
 class Zelda : public Engine {
+private:
+	Sprite* Link;
 public:
 	Zelda();
 	void Init();

@@ -8,7 +8,7 @@
 #include <iostream>
 using namespace std;
 
-class EXPORTER Sprite:Entity {
+class EXPORTER Sprite :public Entity {
 private:
 
 	/*

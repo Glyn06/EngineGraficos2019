@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-class EXPORTER Shape:Entity
+class EXPORTER Shape : public Entity
 {
 private:
 	//textura por defecto blanco para shape que luego se colorea
@@ -22,8 +22,8 @@ private:
 	//fooat con vertices, como tiene que leerlos (stride y ofset)
 public:
 	Shape();
-	float* GetVertex();
-	int* GetIndex();
+	//float* GetVertex();
+	//int* GetIndex();
 	~Shape();
 };
 #endif 

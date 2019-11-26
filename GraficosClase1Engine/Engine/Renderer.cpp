@@ -223,9 +223,11 @@ Renderer::~Renderer()
 	glDisable(GL_BLEND);
 	glfwTerminate();
 }
-void Renderer::LoadTexture(unsigned char* data, int width, int height)
+void Renderer::LoadTexture(Entity* ent)
 {
-
+	unsigned char* data = ent->GetData();		//<--data is unitialized
+	int width = ent->GetWidth();
+	int height = ent->GetHeight();
 		//, int width, int height
 	glGenTextures(1, &ourTexture);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
@@ -249,6 +251,7 @@ void Renderer::LoadTexture(unsigned char* data, int width, int height)
 	}
 
 }
+
 void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
 {
 	GLfloat _vertex[] = {

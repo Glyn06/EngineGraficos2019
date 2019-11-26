@@ -10,8 +10,9 @@
 #include "Renderer.h"
 //class Renderer;
 class EXPORTER Engine{
-private:
+protected:
 	Window* window;
+	Renderer* render;
 	int n = 0;
 public:
 	Engine(); 

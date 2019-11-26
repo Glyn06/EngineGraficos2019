@@ -65,6 +65,7 @@ Sprite::Sprite(string _name, int _width, int _height, int _nrChannels, int _last
 	{
 		printf("loaded \n");
 	}	*/
+	printf("sprite created! \n");
 }
 
 Sprite::~Sprite()

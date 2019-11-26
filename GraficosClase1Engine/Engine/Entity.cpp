@@ -1,12 +1,85 @@
 #include "Entity.h"
 //float SquareV[] =
 
+
 Entity::Entity()
 {
 
 }
+void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels, int _last)
+{
+	printf("entity created? \n");
+	//vertex 1
+	_vertex[0].x = 0.5f;
+	_vertex[0].y = 0.5f;		//x,y
+	_vertex[0].r = 0.0f;
+	_vertex[0].g = 1.0f;
+	_vertex[0].b = 0.0f;
+	_vertex[0].a = 1.0f;		//r,g,b,a
+	_vertex[0].u = 1.0f;
+	_vertex[0].v = 1.0f;		//u,v
+	//vertex 2
+	_vertex[1].x = 0.5f;
+	_vertex[1].y = -0.5f;
+	_vertex[1].r = 1.0f;
+	_vertex[1].g = 1.0f;
+	_vertex[1].b = 1.0f;
+	_vertex[1].a = 1.0f;
+	_vertex[1].u = 1.0f;
+	_vertex[1].v = 0.0f;
+	//vertex 3
+	_vertex[2].x = -0.5f;
+	_vertex[2].y = -0.5f;
+	_vertex[2].r = 0.0f;
+	_vertex[2].g = 0.0f;
+	_vertex[2].b = 1.0f;
+	_vertex[2].a = 1.0f;
+	_vertex[2].u = 0.0f;
+	_vertex[2].v = 0.0f;
+	//vertex 4
+	_vertex[2].x = -0.5f;
+	_vertex[2].y = 0.5f;
+	_vertex[2].r = 1.0f;
+	_vertex[2].g = 0.0f;
+	_vertex[2].b = 1.0f;
+	_vertex[2].a = 1.0f;
+	_vertex[2].u = 0.0f;
+	_vertex[2].v = 1.0f;
+
+	//Index Buffer
+	_index[0] = 0;
+	_index[1] = 1;
+	_index[2] = 2;
+	_index[3] = 2;
+	_index[4] = 3;
+	_index[5] = 0;
+
+	_vertexPointer = _vertex;
+	_indexPointer = _index;
+	printf("first value of vertex: %f \n", _vertex[0].x);
+
+
+	width = _width;
+	height = _height;
+	nrChannels = _nrChannels;
+	last = _last;
+	int size = _path.length();
+	name = new char[size];
+	strcpy_s(name, size, _path.c_str());
+	data = stbi_load(name, &width, &height, &nrChannels, last);
+	if (data == nullptr)
+	{
+		printf("failed to load texture \n");
+	}
+	else
+	{
+		printf("loaded \n");
+	}
+
+}
 Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last)
 {
+	printf("entity created? \n");
 	//vertex 1
 	_vertex[0].x = 0.5f;		
 	_vertex[0].y = 0.5f;		//x,y
@@ -54,7 +127,7 @@ Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last
 
 	_vertexPointer = _vertex;
 	_indexPointer = _index;
-
+	printf("first value of vertex: %f \n",_vertex[0].x);
 
 
 	width = _width;
@@ -74,15 +147,12 @@ Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last
 		printf("loaded \n");
 	}
 }
+/*
 void Entity::Draw(Renderer& rend)
 {
-	rend.LoadTexture(data, width, height);
-	
-	
-	
-	rend.Bind(_vertexPointer, _indexPointer, _vertexN, _indexN);
-}
-
+	//rend.LoadTexture(this);
+	//rend.Bind(_vertexPointer, _indexPointer, _vertexN, _indexN);
+}*/
 /*
 void Entity::LoadSpriteAtribs(string str, int _width, int _height, int channels, int last)
 {
@@ -100,6 +170,7 @@ void Entity::LoadSpriteAtribs(string str, int _width, int _height, int channels,
 */
 Vertex* Entity::GetVertexPointer()
 {
+	printf("pointer to first: %f", _vertexPointer);
 	return _vertexPointer;
 }
 int* Entity::GetIndexPointer()
@@ -115,7 +186,9 @@ int Entity::GetHeight()
 {
 	return height;
 }
-unsigned char* Entity::GetTexture()
+int Entity::GetVertexSize() { return 4; }
+int Entity::GetIndexSize() { return 6; }
+unsigned char* Entity::GetData()
 {
 	return data;
 }
