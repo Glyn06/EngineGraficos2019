@@ -1,7 +1,7 @@
 #ifndef ZELDA_H
 #define ZELDA_H
 #include "Engine.h"
-#include "Sprite.h"
+
 //#include "Shape.h"
 /*	struct Vertex {
 		float x, y;

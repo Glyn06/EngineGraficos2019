@@ -20,7 +20,7 @@ private:
 	float x;
 	float y;
 	float rotat;
-	Window* window;
+	//Window* window;
 	//Shape* shape;
 public:
 
@@ -39,7 +39,9 @@ public:
 
 	void LoadShaders2(float _vertex[]);	//shaders without color, it gets loaded in bind
 	void Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize);	//for shape also loads into shader
-	//void BindEntityData(Vertex* vertexBuffer, int* indexBuffer, int verN, int indN);	//interfaz para que pueda pasarle a bind el vertex* como glufloat
+	void Bind(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize);	//for shape also loads into shader
+
+																					//void BindEntityData(Vertex* vertexBuffer, int* indexBuffer, int verN, int indN);	//interfaz para que pueda pasarle a bind el vertex* como glufloat
 	~Renderer();
 };
 #endif

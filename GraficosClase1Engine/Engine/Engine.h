@@ -8,15 +8,19 @@
 #include "Input.h"
 #include "Window.h"
 #include "Renderer.h"
+#include "Sprite.h"
 //class Renderer;
 class EXPORTER Engine{
 protected:
 	Window* window;
-	Renderer* render;
-	int n = 0;
+
+
 public:
 	Engine(); 
+	Window* GetWindow();
 	virtual void Init()=0;
+	void LoadTextureR(Entity* ente);
+	void BindR(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize);
 	void Loop();
 	virtual void Update()=0;
 	virtual void DeInit()=0;

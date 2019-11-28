@@ -63,7 +63,7 @@ glm::vec3 tMatrix;
 glm::vec3 sMatrix;
 
 std::chrono::time_point<std::chrono::system_clock> then;
-
+GLFWwindow* windForGl;
 Renderer::Renderer()
 {
 	/*
@@ -101,6 +101,7 @@ double TimeForward()
 }
 void Renderer::SpinTriangle(float speed)
 {
+	printf(" spining \n");
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
 	//float t = TimeForward();
 	rotatation += glm::vec2(speed, 0.0f);
@@ -133,7 +134,7 @@ void Renderer::movingRotatingAndScale()
 {
 
 
-
+	//printf("x is %f and y is %f",x,y);
 	sMatrix = glm::vec3(1.0f, 1.0f, 1.0f);
 	tMatrix = glm::vec3(x, y , 0.5f);		//0.5 moves it to the middle of the screen
 	//lo esta moviendo en 0.5 en x y y porque la camara, el cuadrado estan rotados en 45 grados y esto lo mueve en esa direccion, hay que verlo
@@ -199,7 +200,7 @@ void Renderer::Draw()
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
 	
-	glfwSwapBuffers((GLFWwindow*)window);
+	
 
 	movingRotatingAndScale();
 	
@@ -231,7 +232,7 @@ void Renderer::LoadTexture(Entity* ent)
 		//, int width, int height
 	glGenTextures(1, &ourTexture);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
-
+	
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -239,9 +240,9 @@ void Renderer::LoadTexture(Entity* ent)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);		//LINEAR
 	if (data)
 	{
-		printf("loaded texture correctly\n");
-		printf("Width: %i \n", width);
-		printf("Height: %i \n", height);
+		//printf("loaded texture correctly\n");
+		//printf("Width: %i \n", width);
+		//printf("Height: %i \n", height);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -306,6 +307,65 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 	
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6*sizeof(float)));
+	glEnableVertexAttribArray(texAttrib);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+}
+void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
+{
+	GLfloat _vertex[] = {
+	vertexBuffer[0] , vertexBuffer[1], vertexBuffer[2], vertexBuffer[3], vertexBuffer[4], vertexBuffer[5], vertexBuffer[6], vertexBuffer[7],
+	vertexBuffer[8] , vertexBuffer[9], vertexBuffer[10], vertexBuffer[11], vertexBuffer[12], vertexBuffer[13], vertexBuffer[14], vertexBuffer[15],
+	vertexBuffer[16] , vertexBuffer[17], vertexBuffer[18], vertexBuffer[19], vertexBuffer[20], vertexBuffer[21], vertexBuffer[22], vertexBuffer[23],
+	vertexBuffer[24] , vertexBuffer[25], vertexBuffer[26], vertexBuffer[27], vertexBuffer[28], vertexBuffer[29], vertexBuffer[30], vertexBuffer[31]
+	};
+
+	/*
+	int stride = 8;
+	string xCoord = "";
+	string yCoord = "";
+	for (int i= 0; i < 4; i++)
+	{
+		printf("vec %i", i);
+		printf("position: %f",		_vertex[0 + (stride* i )]);
+		printf(" %f",				_vertex[1 + (stride* i )]);
+
+		printf(" color: %f",		_vertex[2 + (stride* i )]);
+		printf(" %f",				_vertex[3 + (stride* i )]);
+		printf(" %f ",			_vertex[4 + (stride* i )]);
+		printf(" %f ", _vertex[5 + (stride* i)]);
+
+		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
+		printf("%f  \n" , _vertex[7 + (stride* i)]);
+	}	*/
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//SquareVertex
+	//_vertex
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, _vertexSize, _vertex, GL_STATIC_DRAW);
+
+	//squareIndex
+	//_index
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexSize, _index, GL_STATIC_DRAW);
+
+
+	LoadShaders2(_vertex);
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(posAttrib);
+
+	GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
+	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(colAttrib);
+
+	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);

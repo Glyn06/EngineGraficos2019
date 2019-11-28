@@ -4,11 +4,11 @@
 
 Entity::Entity()
 {
-
+	printf("Entity created! const default\n");
 }
-void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels, int _last)
+void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels)
 {
-	printf("entity created? \n");
+	printf("Loading Atribs_custom.. \n");
 	//vertex 1
 	_vertex[0].x = 0.5f;
 	_vertex[0].y = 0.5f;		//x,y
@@ -37,14 +37,14 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels, 
 	_vertex[2].u = 0.0f;
 	_vertex[2].v = 0.0f;
 	//vertex 4
-	_vertex[2].x = -0.5f;
-	_vertex[2].y = 0.5f;
-	_vertex[2].r = 1.0f;
-	_vertex[2].g = 0.0f;
-	_vertex[2].b = 1.0f;
-	_vertex[2].a = 1.0f;
-	_vertex[2].u = 0.0f;
-	_vertex[2].v = 1.0f;
+	_vertex[3].x = -0.5f;
+	_vertex[3].y = 0.5f;
+	_vertex[3].r = 1.0f;
+	_vertex[3].g = 0.0f;
+	_vertex[3].b = 1.0f;
+	_vertex[3].a = 1.0f;
+	_vertex[3].u = 0.0f;
+	_vertex[3].v = 1.0f;
 
 	//Index Buffer
 	_index[0] = 0;
@@ -56,20 +56,22 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels, 
 
 	_vertexPointer = _vertex;
 	_indexPointer = _index;
-	printf("first value of vertex: %f \n", _vertex[0].x);
+	LoadFloatVertex(_vertex);
+	//printf("first value of vertex: %f \n", _vertex[0].x);
 
-
+	_last = 0;
 	width = _width;
 	height = _height;
 	nrChannels = _nrChannels;
-	last = _last;
+	
 	int size = _path.length();
 	name = new char[size];
-	strcpy_s(name, size, _path.c_str());
-	data = stbi_load(name, &width, &height, &nrChannels, last);
+	
+	strcpy_s(name, sizeof(name)+size, _path.c_str());//<--- tamanio de buffer es muy chico? 0x0ce4b108 "" en donde "" tiene basura!
+	data = stbi_load(name, &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data == nullptr)
 	{
-		printf("failed to load texture \n");
+		printf("failed to load texture in load atribs \n");
 	}
 	else
 	{
@@ -77,7 +79,7 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels, 
 	}
 
 }
-Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last)
+Entity::Entity(string _path, int _width, int _height, int _nrChannels)
 {
 	printf("entity created? \n");
 	//vertex 1
@@ -108,14 +110,14 @@ Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last
 	_vertex[2].u = 0.0f;
 	_vertex[2].v = 0.0f;
 	//vertex 4
-	_vertex[2].x = -0.5f;
-	_vertex[2].y = 0.5f;
-	_vertex[2].r = 1.0f;
-	_vertex[2].g = 0.0f;
-	_vertex[2].b = 1.0f;
-	_vertex[2].a = 1.0f;
-	_vertex[2].u = 0.0f;
-	_vertex[2].v = 1.0f;
+	_vertex[3].x = -0.5f;
+	_vertex[3].y = 0.5f;
+	_vertex[3].r = 1.0f;
+	_vertex[3].g = 0.0f;
+	_vertex[3].b = 1.0f;
+	_vertex[3].a = 1.0f;
+	_vertex[3].u = 0.0f;
+	_vertex[3].v = 1.0f;
 
 	//Index Buffer
 	_index[0] = 0;
@@ -126,21 +128,24 @@ Entity::Entity(string _path, int _width, int _height, int _nrChannels, int _last
 	_index[5] = 0;
 
 	_vertexPointer = _vertex;
-	_indexPointer = _index;
-	printf("first value of vertex: %f \n",_vertex[0].x);
+	
 
+	_indexPointer = _index;
+	//printf("first value of vertex: %f \n",_vertex[0].x);
+
+	LoadFloatVertex(_vertex);
 
 	width = _width;
 	height = _height;
 	nrChannels = _nrChannels;
-	last = _last;
+	_last = 0;
 	int size = _path.length();
 	name = new char[size];
 	strcpy_s(name, size, _path.c_str());
-	data = stbi_load(name, &width, &height, &nrChannels, last);
+	data = stbi_load(name, &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data == nullptr)
 	{
-		printf("failed to load texture \n");
+		printf("failed to load texture in constructor \n");
 	}
 	else
 	{
@@ -168,10 +173,32 @@ void Entity::LoadSpriteAtribs(string str, int _width, int _height, int channels,
 	delete[] texture;
 }
 */
+void Entity::LoadFloatVertex(Vertex* vert)
+{
+
+	for (int i = 0; i < 4; i++)
+	{
+			_vertexF[i*8] = vert[i].x;
+			_vertexF[i*8+1] = vert[i].y;
+			_vertexF[i*8+2] = vert[i].r;
+			_vertexF[i*8+3] = vert[i].g;
+			_vertexF[i*8+4] = vert[i].b;
+			_vertexF[i*8+5] = vert[i].a;
+			_vertexF[i*8+6] = vert[i].u;
+			_vertexF[i*8+7] = vert[i].v;
+			//printf("vertex %i atribs   x: %f , y: %f \n",i,_vertexF[i*8],_vertexF[i*8+1]);
+	}
+	_vertexPointetrF = _vertexF;
+}
 Vertex* Entity::GetVertexPointer()
 {
-	printf("pointer to first: %f", _vertexPointer);
+	//printf("pointer to first: %f", _vertexPointer);
 	return _vertexPointer;
+}
+float* Entity::GetVertexPointerF()
+{
+	//printf("pointer to first Float: %f", *_vertexPointetrF);
+	return _vertexPointetrF;
 }
 int* Entity::GetIndexPointer()
 {

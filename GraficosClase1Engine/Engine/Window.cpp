@@ -11,6 +11,7 @@ Window::Window(int sWidth, int sHeight, const char* name)
 		glfwTerminate();
 		cout << "Fallo creacion de la window";
 	}
+	printf("window created \n");
 }
 void Window::WindowOpen() 
 {

@@ -18,7 +18,8 @@ private:
 	*/
 	//va a tener animaciones
 public:
-	Sprite(string n, int w, int h, int channels, int _last);
+	Sprite();
+	Sprite(string n, int w, int h, int channels);
 	//unsigned char* GetTexture();
 	~Sprite();
 };

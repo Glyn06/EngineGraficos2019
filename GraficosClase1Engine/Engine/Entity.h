@@ -21,25 +21,29 @@ protected:
 	
 	Vertex _vertex[4];
 	int _index[6];
-	
+	float* _vertexF = new float[4*8];
 	int _indexN, _vertexN;
 	Vertex* _vertexPointer;
+	float* _vertexPointetrF;
 	int* _indexPointer;
 
 	int width, height;
-	int nrChannels, last;
+	int nrChannels, _last;
 	char* name;
 	unsigned char* data;
 	
 public:
 
 	Entity();
-	void LoadAtribs(string _path, int _width, int _height, int _nrChannels, int _last);
-	Entity(string _name, int _width, int _height, int _nrChannels, int _last);
+	void LoadAtribs(string _path, int _width, int _height, int _nrChannels);
+	Entity(string _name, int _width, int _height, int _nrChannels);
+	
 	//void Draw(Renderer& rend);
 	//unsigned char* GetSprite();
 	//void LoadSpriteAtribs(string str, int _width, int _height, int channels, int last);
+	void LoadFloatVertex(Vertex* vert);
 	Vertex* GetVertexPointer();
+	float* GetVertexPointerF();
 	int* GetIndexPointer();
 	int GetWidth();
 	int GetHeight();

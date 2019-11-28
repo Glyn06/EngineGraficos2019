@@ -2,7 +2,6 @@
   Animation.cpp
   Engine.cpp
   Entity.cpp
-c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\engine\entity.cpp(173): warning C4477: 'printf' : la cadena de formato '%f' requiere un argumento de tipo 'double', pero el argumento variádico 1 tiene el tipo 'Vertex *'
   Input.cpp
   Renderer.cpp
   Shape.cpp

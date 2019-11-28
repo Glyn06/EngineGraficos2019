@@ -47,7 +47,8 @@ glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 glEnableVertexAttribArray(2);
 
 */
-Sprite::Sprite(string _name, int _width, int _height, int _nrChannels, int _last)
+Sprite::Sprite() { printf("sprite created! const default \n"); };
+Sprite::Sprite(string _name, int _width, int _height, int _nrChannels)
 {/*
 	width = _width;
 	height = _height;
@@ -65,7 +66,7 @@ Sprite::Sprite(string _name, int _width, int _height, int _nrChannels, int _last
 	{
 		printf("loaded \n");
 	}	*/
-	printf("sprite created! \n");
+	printf("sprite created! const custom\n");
 }
 
 Sprite::~Sprite()

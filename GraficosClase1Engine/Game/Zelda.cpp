@@ -10,18 +10,19 @@ void Zelda::Init()
 	int height = 16;
 	string str = "../Textures/BlueLink.png";
 	int nrChannels = 1;
-	int last = 0;
 
-	Link = new Sprite(str, width, height, nrChannels, last);
-	Link->LoadAtribs(str, width, height, nrChannels, last);
-	render->Bind(Link->GetVertexPointer(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	Link = new Sprite();
+	Link->LoadAtribs(str, width, height, nrChannels);
+	//render->Bind(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	BindR(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	LoadTextureR(Link);
 }
 void Zelda::Update()
 {
 	//render->Bind(Link->GetVertexPointer(),Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	//render->LoadTexture();
 	
-	render->LoadTexture(Link);
+	//render->LoadTexture(Link);
 	
 	
 	//Link->Draw(*render);
