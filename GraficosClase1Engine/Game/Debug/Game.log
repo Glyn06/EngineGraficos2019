@@ -1,11 +1,11 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: El directorio Output no termina con una barra diagonal final. Esta instancia de compilación agregará la barra diagonal porque es necesaria para que se pueda evaluar correctamente el directorio Output.
-  C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
-  1 archivo(s) copiado(s)
-  C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
-  1 archivo(s) copiado(s)
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\WDExpress\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\lib\Engine.dll
+  1 File(s) copied
+  C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
+  1 File(s) copied
   Game.cpp
-c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\game\game.cpp(42): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
+c:\users\asplomer\desktop\workstuff\repo graficos\enginegraficos2019\graficosclase1engine\game\game.cpp(42): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Zelda.cpp
-  Generando código...
-     Creando biblioteca C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib y objeto C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
-  Game.vcxproj -> C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe
+  Generating Code...
+     Creating library C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib and object C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
+  Game.vcxproj -> C:\Users\asplomer\Desktop\workstuff\repo graficos\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe

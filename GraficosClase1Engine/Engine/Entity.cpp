@@ -67,7 +67,7 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels)
 	int size = _path.length();
 	name = new char[size];
 	
-	strcpy_s(name, sizeof(name)+size, _path.c_str());//<--- tamanio de buffer es muy chico? 0x0ce4b108 "" en donde "" tiene basura!
+	strcpy_s(name, sizeof(name)+size, _path.c_str()); //<--- tamanio de buffer es muy chico? 0x0ce4b108 "" en donde "" tiene basura!
 	data = stbi_load(name, &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data == nullptr)
 	{
@@ -75,7 +75,7 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels)
 	}
 	else
 	{
-		printf("loaded \n");
+		printf("loaded atribs\n");
 	}
 
 }
@@ -149,7 +149,7 @@ Entity::Entity(string _path, int _width, int _height, int _nrChannels)
 	}
 	else
 	{
-		printf("loaded \n");
+		printf("loaded entity constr\n");
 	}
 }
 /*

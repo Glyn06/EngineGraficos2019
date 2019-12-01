@@ -66,28 +66,14 @@ std::chrono::time_point<std::chrono::system_clock> then;
 GLFWwindow* windForGl;
 Renderer::Renderer()
 {
-	/*
-	entity = new Entity(SQUARE_SHAPE);
-	// ON THE GAME IN EXE PLOX
 
-	//
-	float* Vertex = entity->GetVertexPointer();
-	int* index = entity->GetIndexPointer();
-	int vertNum = entity->GetVertexNum(0);
-	int indNum = entity->GetVertexNum(1);
-	*/
-	//shape = new Shape();
 	then = std::chrono::system_clock::now();
 	//glewInit();
 	x = 0.0f;
 	y = 0.0f;
 	rotat = 0.0f;
 	rotatation = glm::vec2(0.0f, 0.0f);
-	//this should go here
-	//********************************************************************************
-	//Bind(Vertex, index, vertNum, indNum);		//<---this should get called after we recieve this from the entity which should do what shape does
-													//while the vertexes get loaded in SHAPE (to know if we are drawing a square or whatever)
-	//********************************************************************************
+
 }
 
 double TimeForward()
@@ -101,9 +87,7 @@ double TimeForward()
 }
 void Renderer::SpinTriangle(float speed)
 {
-	printf(" spining \n");
 	glm::mat4 rotMatrix = glm::mat4(1.0f);					//crea una matriz de 4*4 inicializada con la identidad
-	//float t = TimeForward();
 	rotatation += glm::vec2(speed, 0.0f);
  	rotMatrix = glm::rotate(rotMatrix, glm::radians(rotatation.x+0.0f), glm::vec3(0.0f, 0.0f, 1.0f));	//1:matr a mult 2:velocidad 3: en que ejes rota
 	uniRot = glGetUniformLocation(shaderProgram, "rotate");					//le pasa al shader trans
@@ -120,7 +104,7 @@ void TranslateMatrix(glm::vec3 trans)
 	glm::mat4 transMatrix = glm::translate(glm::mat4(1.0f), trans);
 
 	GLint uniTrans = glGetUniformLocation(shaderProgram, "translate");
-	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(transMatrix));			
+	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(transMatrix));		
 }
 
 void ScaleMatrix(glm::vec3 scale)
@@ -179,15 +163,6 @@ void Projection(bool perspective)
 
 void Renderer::Draw()
 {
-	
-	/*
-	SpinTriangle(1);
-	BackgroundColor(0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glDrawArrays(GL_TRIANGLES, 0,3);		//<- cambiar a draw elements para desp poder dibujar lo que queramos
-	*/
-	//movingRotatingAndScale();
-	
 	View();
 
 	bool perspective = false;
@@ -254,7 +229,7 @@ void Renderer::LoadTexture(Entity* ent)
 }
 
 void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
-{
+{	//Esta de más, se usa float*, queda en caso de necesitarlo, de lo contrario borrar
 	GLfloat _vertex[] = {
 	vertexBuffer[0].x , vertexBuffer[0].y , vertexBuffer[0].r, vertexBuffer[0].g, vertexBuffer[0].b, vertexBuffer[0].a, vertexBuffer[0].u, vertexBuffer[0].v,
 	vertexBuffer[1].x , vertexBuffer[1].y , vertexBuffer[1].r, vertexBuffer[1].g, vertexBuffer[1].b, vertexBuffer[1].a, vertexBuffer[1].u, vertexBuffer[1].v,
@@ -262,7 +237,7 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 	vertexBuffer[3].x , vertexBuffer[3].y , vertexBuffer[3].r, vertexBuffer[3].g, vertexBuffer[3].b, vertexBuffer[3].a, vertexBuffer[3].u, vertexBuffer[3].v
 	};
 
-	/*
+	
 	int stride = 8;
 	string xCoord = "";
 	string yCoord = "";
@@ -279,7 +254,7 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 		
 		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
 		printf("%f  \n" , _vertex[7 + (stride* i)]);
-	}	*/
+	}	
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);										
 	
@@ -310,7 +285,7 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 	glEnableVertexAttribArray(texAttrib);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 }
 void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
 {
@@ -321,24 +296,7 @@ void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _ind
 	vertexBuffer[24] , vertexBuffer[25], vertexBuffer[26], vertexBuffer[27], vertexBuffer[28], vertexBuffer[29], vertexBuffer[30], vertexBuffer[31]
 	};
 
-	/*
-	int stride = 8;
-	string xCoord = "";
-	string yCoord = "";
-	for (int i= 0; i < 4; i++)
-	{
-		printf("vec %i", i);
-		printf("position: %f",		_vertex[0 + (stride* i )]);
-		printf(" %f",				_vertex[1 + (stride* i )]);
-
-		printf(" color: %f",		_vertex[2 + (stride* i )]);
-		printf(" %f",				_vertex[3 + (stride* i )]);
-		printf(" %f ",			_vertex[4 + (stride* i )]);
-		printf(" %f ", _vertex[5 + (stride* i)]);
-
-		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
-		printf("%f  \n" , _vertex[7 + (stride* i)]);
-	}	*/
+	
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
@@ -371,12 +329,7 @@ void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _ind
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 }
-/*void Renderer::BindEntityData(Vertex* vertexBuffer, int* indexBuffer, int verN, int indN)
-{
-	
 
-	Bind(vert, indexBuffer, verN, indN);
-}*/
 void Renderer::LoadShaders2(float _vertex[])
 {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	

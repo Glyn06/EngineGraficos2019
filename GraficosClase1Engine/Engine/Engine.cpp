@@ -62,12 +62,12 @@ void Engine::Loop()
 		Update();
 		
 		render->Draw();
-		glfwPollEvents();
+		
 		glfwSwapBuffers((GLFWwindow*)window->GetWindow());
 
 
 		/* Poll for and process events */
-
+		glfwPollEvents();
 		
 
 	}
@@ -88,7 +88,7 @@ void Engine::LoadTextureR(Entity* ente)
 }
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
-	printf("moving frame:%i \n",n);
+	printf(" moving frame:%i \n",n);
 	float* inputs =	inp->Inputs(key, action);
 	render->RotatationShape(inputs[0]);
 	render->MovePositionShape(inputs[1], inputs[2]);
