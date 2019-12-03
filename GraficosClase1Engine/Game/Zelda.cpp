@@ -6,29 +6,37 @@ Zelda::Zelda()
 }
 void Zelda::Init()
 {
-	/*
+	
 	int width = 16;
 	int height = 16;
 	string str = "../Textures/BlueLink.png";
-	*/
 	
 	
-	int width = 2;
-	int height = 2;
-	string str = "../Textures/Default.png";
-	int nrChannels = 1;
+	
+	int width2 = 840;
+	int height2 = 680;
+	string str2 = "../Textures/test.png";
+	
 
+	int nrChannels = 1;
+	
 	Link = new Sprite();
 	Link->LoadAtribs(str, width, height, nrChannels);
-	//render->Bind(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
-	
+	Link->SetMove(true);
 
+	Obstacle = new Shape();
+	Obstacle->LoadAtribs(str2, width2, height2, nrChannels);
+	Obstacle->SetMove(false);
+	Obstacle->SetX(0.7f);
+	Obstacle->SetY(0.5f);
+
+	//render->Bind(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	//BindR(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	//BindR2(Link->GetVertexPointer(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 
 	BindR3();
-	LoadTextureR(Link);
-	
+	//LoadTextureR(Link);
+
 }
 void Zelda::Update()
 {
@@ -49,7 +57,41 @@ void Zelda::Update()
 	
 	
 	//Link->Draw(*render);
+	n++;
+	printf("\r frame: %i and should draw ",n);
+	
+	
+	if (n == 30)
+	{
+		n = 0;
+		if(drawL)
+		drawL= false;
+		else drawL = true;
+	}
 
+	HalfDrawR();
+	/*
+	if (!drawL) {
+		LoadTextureOrigin(Obstacle);
+		DrawEntityR(Obstacle);
+		printf("obstacle");
+	}
+	else {
+		printf(" link");
+		LoadTextureOrigin(Link);
+		DrawEntityR(Link);
+	}*/
+	printf("BOTH");
+
+	LoadTextureOrigin(Link);
+	Movement(Link);
+	DrawEntityR(Link);
+	
+
+	LoadTextureOrigin(Obstacle);
+	Movement(Obstacle);
+	DrawEntityR(Obstacle);
+	
 }
 void Zelda::DeInit()
 {
@@ -59,7 +101,12 @@ void Zelda::Spin()
 {
 
 }
+/*
 void Zelda::Movement()
+{
+
+}*/
+void Zelda::InputE()
 {
 
 }

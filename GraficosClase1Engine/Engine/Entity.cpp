@@ -219,6 +219,12 @@ unsigned char* Entity::GetData()
 {
 	return data;
 }
+void Entity::SetMove(bool b) { Moved = b; }
+bool Entity::GetMove() { return Moved; }
+void Entity::SetX(float nx) { posX = nx; }
+void Entity::SetY(float ny) { posY = ny; }
+float Entity::GetX() { return posX; }
+float Entity::GetY() { return posY; }
 Entity::~Entity()
 {
 }

@@ -29,6 +29,7 @@ public:
 	Renderer();
 	void Draw();
 	void movingRotatingAndScale();
+	void movingRotatingAndScaleUnMoving(float unmx, float unmy);
 	void SpinTriangle(float speed);
 	void MovePositionShape(float x, float y);
 	void RotatationShape(float rot);
@@ -46,7 +47,10 @@ public:
 	void OriginDraw();
 	void OriginBind();
 	void OriginShaders();
-
+	void OriginLoadTexture(Entity* ent);
+	void HalfDraw();
+	void DrawEntity(Entity* ent);
+	
 	~Renderer();
 };
 #endif

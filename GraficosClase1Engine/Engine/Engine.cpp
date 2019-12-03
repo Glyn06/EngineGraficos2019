@@ -14,7 +14,7 @@ Renderer* render;
 Input* inp;
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 int rotate = 0;
-int n = 0;
+
 Engine::Engine()
 {
 	//render = new Renderer();
@@ -60,14 +60,18 @@ void Engine::Loop()
 		//printf("frame: %i \n", n);
 		n++;
 		//printf("\r frame:%i         ", n);
-		Update();
+		
 		
 		//render->Draw();
-		render->OriginDraw();
+		//render->OriginDraw();
+		Update();
+		//render->movingRotatingAndScale();
 		glfwSwapBuffers((GLFWwindow*)window->GetWindow());
 
 
 		/* Poll for and process events */
+		
+		
 		glfwPollEvents();
 		
 
@@ -95,11 +99,32 @@ void Engine::LoadTextureR(Entity* ente)
 {
 	render->LoadTexture(ente);
 }
-void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
-
-	printf(" moving frame:%i \n",n);
+void Engine::LoadTextureOrigin(Entity* ente)
+{
+	render->OriginLoadTexture(ente);
+}
+void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) 
+{
 	float* inputs =	inp->Inputs(key, action);
 	render->RotatationShape(inputs[0]);
 	render->MovePositionShape(inputs[1], inputs[2]);
-
+}
+void Engine::Movement(Entity* ent)
+{
+	if (ent->GetMove()) {
+		render->movingRotatingAndScale();
+		printf("drawing movable");
+	}
+	else{
+		render->movingRotatingAndScaleUnMoving(ent->GetX(), ent->GetY());
+		printf(" drawing OBST \n");
+	}
+}
+void Engine::HalfDrawR()
+{
+	render->HalfDraw();
+}
+void Engine::DrawEntityR(Entity* ent)
+{
+	render->DrawEntity(ent);
 }

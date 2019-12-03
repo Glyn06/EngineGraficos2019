@@ -31,7 +31,8 @@ protected:
 	int nrChannels, _last;
 	char* name;
 	unsigned char* data;
-	
+	bool Moved= false;
+	float posX, posY;
 public:
 
 	Entity();
@@ -49,6 +50,12 @@ public:
 	int GetHeight();
 	int GetVertexSize();
 	int GetIndexSize();
+	void SetMove(bool b);
+	bool GetMove();
+	void SetX(float nx);
+	void SetY(float ny);
+	float GetX();
+	float GetY();
 	unsigned char* GetData();
 	~Entity();
 

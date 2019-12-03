@@ -56,10 +56,8 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-
-
-//outColor = texture(ourTexture, textureCoords)* ourColor;
-outColor = ourColor;
+outColor = texture(ourTexture, textureCoords)* ourColor;
+//outColor = ourColor;
 
 }
 )glsl";
@@ -68,7 +66,7 @@ outColor = ourColor;
 unsigned int VBO;
 unsigned int EBO;
 unsigned int VAO;
-//unsigned int ourTexture;
+unsigned int ourTexture;
 
 GLint uniRot;
 GLuint shaderProgram;
@@ -141,6 +139,17 @@ void Renderer::movingRotatingAndScale()
 	ScaleMatrix(sMatrix);
 	SpinTriangle(rotat);
 	rotat = 0;
+}
+void Renderer::movingRotatingAndScaleUnMoving(float unmx, float unmy)
+{
+
+	sMatrix = glm::vec3(1.0f, 1.0f, 1.0f);
+	tMatrix = glm::vec3(unmx, unmy, 0.5f);		//0.5 moves it to the middle of the screen
+	//lo esta moviendo en 0.5 en x y y porque la camara, el cuadrado estan rotados en 45 grados y esto lo mueve en esa direccion, hay que verlo
+
+	TranslateMatrix(tMatrix);
+	ScaleMatrix(sMatrix);
+	SpinTriangle(0);
 }
 void View()
 {
@@ -396,14 +405,14 @@ void Renderer::OriginDraw()
 	BackgroundColor(0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	//printf(" algo         \r");
-	//glBindTexture(GL_TEXTURE_2D, ourTexture);
+	glBindTexture(GL_TEXTURE_2D, ourTexture);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
 
 
 
-	movingRotatingAndScale();
+//	movingRotatingAndScale();
 
 }
 void Renderer::OriginShaders()
@@ -446,10 +455,11 @@ void Renderer::OriginBind()
 		//LoadTexture();
 		//LoadShaders2(_vertex);
 		OriginShaders();
+		/*
 		GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(posAttrib);
-
+		*/
 		GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
 		glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 		glEnableVertexAttribArray(colAttrib);
@@ -461,4 +471,50 @@ void Renderer::OriginBind()
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 
+}
+void Renderer::OriginLoadTexture(Entity* ent)
+{
+	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(posAttrib);
+	glGenTextures(1, &ourTexture);
+	glBindTexture(GL_TEXTURE_2D, ourTexture);
+
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);		//LINEAR
+	unsigned char* data = ent->GetData();		//<--data is unitialized
+	int width = ent->GetWidth();
+	int height = ent->GetHeight();
+	if (data)
+	{
+		printf("loaded texture correctly\n");
+		printf("Width: %i \n", width);
+		printf("Height: %i \n", height);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		printf("Failed to load texture \n");
+	}
+
+}
+void Renderer::HalfDraw()
+{
+	View();
+
+	bool perspective = false;
+
+	Projection(perspective);
+	BackgroundColor(0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+void Renderer::DrawEntity(Entity* ent)
+{
+	glBindTexture(GL_TEXTURE_2D, ourTexture);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 }
