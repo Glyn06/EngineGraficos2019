@@ -42,7 +42,7 @@ void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels)
 	_vertex[3].r = 1.0f;
 	_vertex[3].g = 0.0f;
 	_vertex[3].b = 1.0f;
-	_vertex[3].a = 1.0f;
+	_vertex[3].a = 0.5f;
 	_vertex[3].u = 0.0f;
 	_vertex[3].v = 1.0f;
 

@@ -50,6 +50,7 @@ void Engine::startGLFW()
 void Engine::Loop()
 {
 	Init();
+	//printf("          \n          ");
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose((GLFWwindow*)window->GetWindow()))
 	{
@@ -58,11 +59,11 @@ void Engine::Loop()
 		render->SpinTriangle(0.0f);
 		//printf("frame: %i \n", n);
 		n++;
-		
+		//printf("\r frame:%i         ", n);
 		Update();
 		
-		render->Draw();
-		
+		//render->Draw();
+		render->OriginDraw();
 		glfwSwapBuffers((GLFWwindow*)window->GetWindow());
 
 
@@ -81,6 +82,14 @@ Engine::~Engine()
 void Engine::BindR(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
 {
 	render->Bind(vertexBuffer, _index, _vertexSize, _indexSize);
+}
+void Engine::BindR2(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
+{
+	render->Bind(vertexBuffer, _index, _vertexSize, _indexSize);
+}
+void Engine::BindR3()
+{
+	render->OriginBind();
 }
 void Engine::LoadTextureR(Entity* ente)
 {

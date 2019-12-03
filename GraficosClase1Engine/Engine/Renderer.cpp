@@ -11,6 +11,20 @@
 using namespace std;
 glm::vec2 rotatation = glm::vec2(0.0f, 0.0f);
 //translate * *scale
+
+GLuint squareIndex[] = {	//index buffer
+	0 , 1, 2,		// tirangulo derecho inferior
+	2, 3, 0
+};
+
+GLfloat VertexSquare3[] = {	//vertex buffer
+	 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f,		// Vertex 1 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 0
+	 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,		// Vertex 2 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 1
+	-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,	// Vertex 3 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 2
+	-0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,	// Vertex 4 (X, Y, COLOR RGBA, TEXTURE COORDS XY) 3
+};
+
+
 const char* vertexSource = R"glsl(
     #version 330 core
 out vec4 ourColor;
@@ -44,8 +58,8 @@ void main()
 {
 
 
-outColor = texture(ourTexture, textureCoords)* ourColor;
-//outColor = ourColor;
+//outColor = texture(ourTexture, textureCoords)* ourColor;
+outColor = ourColor;
 
 }
 )glsl";
@@ -54,7 +68,7 @@ outColor = texture(ourTexture, textureCoords)* ourColor;
 unsigned int VBO;
 unsigned int EBO;
 unsigned int VAO;
-unsigned int ourTexture;
+//unsigned int ourTexture;
 
 GLint uniRot;
 GLuint shaderProgram;
@@ -168,9 +182,10 @@ void Renderer::Draw()
 	bool perspective = false;
 
 	Projection(perspective);
-	BackgroundColor(0.0f,1.0f,0.0f);
+	BackgroundColor(0.0f,1.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBindTexture(GL_TEXTURE_2D, ourTexture);
+	//printf(" algo         \r");
+	//glBindTexture(GL_TEXTURE_2D, ourTexture);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
 
@@ -205,6 +220,7 @@ void Renderer::LoadTexture(Entity* ent)
 	int width = ent->GetWidth();
 	int height = ent->GetHeight();
 		//, int width, int height
+	/*
 	glGenTextures(1, &ourTexture);
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
 	
@@ -225,7 +241,7 @@ void Renderer::LoadTexture(Entity* ent)
 	{
 		printf( "Failed to load texture \n");
 	}
-
+	*/
 }
 
 void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
@@ -237,24 +253,25 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 	vertexBuffer[3].x , vertexBuffer[3].y , vertexBuffer[3].r, vertexBuffer[3].g, vertexBuffer[3].b, vertexBuffer[3].a, vertexBuffer[3].u, vertexBuffer[3].v
 	};
 
-	
 	int stride = 8;
 	string xCoord = "";
 	string yCoord = "";
-	for (int i= 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		printf("vec %i", i);
-		printf("position: %f",		_vertex[0 + (stride* i )]);
-		printf(" %f",				_vertex[1 + (stride* i )]);
+		printf("position: %f", _vertex[0 + (stride* i)]);
+		printf(" %f", _vertex[1 + (stride* i)]);
 
-		printf(" color: %f",		_vertex[2 + (stride* i )]);
-		printf(" %f",				_vertex[3 + (stride* i )]);
-		printf(" %f ",			_vertex[4 + (stride* i )]);
+		printf(" color: %f", _vertex[2 + (stride* i)]);
+		printf(" %f", _vertex[3 + (stride* i)]);
+		printf(" %f ", _vertex[4 + (stride* i)]);
 		printf(" %f ", _vertex[5 + (stride* i)]);
-		
-		printf("Texture Coords is %f ", _vertex[6+ (stride* i)]);
-		printf("%f  \n" , _vertex[7 + (stride* i)]);
-	}	
+
+		printf("Texture Coords is %f ", _vertex[6 + (stride* i)]);
+		printf("%f  \n", _vertex[7 + (stride* i)]);
+	}
+
+
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);										
 	
@@ -279,12 +296,13 @@ void Renderer::Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _in
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
 	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(colAttrib);
-	
+	/*
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6*sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	*/
 	
 }
 void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize)
@@ -295,7 +313,23 @@ void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _ind
 	vertexBuffer[16] , vertexBuffer[17], vertexBuffer[18], vertexBuffer[19], vertexBuffer[20], vertexBuffer[21], vertexBuffer[22], vertexBuffer[23],
 	vertexBuffer[24] , vertexBuffer[25], vertexBuffer[26], vertexBuffer[27], vertexBuffer[28], vertexBuffer[29], vertexBuffer[30], vertexBuffer[31]
 	};
+	int stride = 8;
+	string xCoord = "";
+	string yCoord = "";
+	for (int i = 0; i < 4; i++)
+	{
+		printf("vec %i", i);
+		printf("position: %f", _vertex[0 + (stride* i)]);
+		printf(" %f", _vertex[1 + (stride* i)]);
 
+		printf(" color: %f", _vertex[2 + (stride* i)]);
+		printf(" %f", _vertex[3 + (stride* i)]);
+		printf(" %f ", _vertex[4 + (stride* i)]);
+		printf(" %f ", _vertex[5 + (stride* i)]);
+
+		printf("Texture Coords is %f ", _vertex[6 + (stride* i)]);
+		printf("%f  \n", _vertex[7 + (stride* i)]);
+	}
 	
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
@@ -313,7 +347,7 @@ void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _ind
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexSize, _index, GL_STATIC_DRAW);
 
 
-	LoadShaders2(_vertex);
+	
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(posAttrib);
@@ -322,12 +356,16 @@ void Renderer::Bind(float* vertexBuffer, int _index[], int _vertexSize, int _ind
 	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(colAttrib);
 
+	LoadShaders2(_vertex);
+	/*
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(texAttrib);
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
+	*/
+	
 }
 
 void Renderer::LoadShaders2(float _vertex[])
@@ -347,4 +385,80 @@ void Renderer::LoadShaders2(float _vertex[])
 	glBindFragDataLocation(shaderProgram, 0, "outColor");
 	glLinkProgram(shaderProgram);								//linkean el "programa"
 	glUseProgram(shaderProgram);
+}
+void Renderer::OriginDraw()
+{
+	View();
+
+	bool perspective = false;
+
+	Projection(perspective);
+	BackgroundColor(0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	//printf(" algo         \r");
+	//glBindTexture(GL_TEXTURE_2D, ourTexture);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
+
+
+
+
+	movingRotatingAndScale();
+
+}
+void Renderer::OriginShaders()
+{
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	//crea un shader vacio
+	glShaderSource(vertexShader, 1, &vertexSource, NULL);	//lo carga con el source
+	glCompileShader(vertexShader);							//compila el vertex shader
+
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+	glCompileShader(fragmentShader);
+
+	shaderProgram = glCreateProgram();					// crean un programa que va a tener el codigo de los shader
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+
+	glBindFragDataLocation(shaderProgram, 0, "outColor");
+
+	glLinkProgram(shaderProgram);								//linkean el "programa"
+	glUseProgram(shaderProgram);
+
+	GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
+	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);			//cambiar color aca
+}
+void Renderer::OriginBind()
+{
+	GLfloat* _vertex = VertexSquare3;
+	GLuint* _arraySize = squareIndex;
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexSquare3), VertexSquare3, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndex), squareIndex, GL_STATIC_DRAW);
+
+		//LoadTexture();
+		//LoadShaders2(_vertex);
+		OriginShaders();
+		GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+		glEnableVertexAttribArray(posAttrib);
+
+		GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
+		glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
+		glEnableVertexAttribArray(colAttrib);
+
+		GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
+		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(texAttrib);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+
 }

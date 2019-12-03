@@ -6,10 +6,16 @@ Zelda::Zelda()
 }
 void Zelda::Init()
 {
+	/*
 	int width = 16;
 	int height = 16;
 	string str = "../Textures/BlueLink.png";
-	//string str = "../Textures/Default.png";
+	*/
+	
+	
+	int width = 2;
+	int height = 2;
+	string str = "../Textures/Default.png";
 	int nrChannels = 1;
 
 	Link = new Sprite();
@@ -17,7 +23,10 @@ void Zelda::Init()
 	//render->Bind(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	
 
-	BindR(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	//BindR(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+	//BindR2(Link->GetVertexPointer(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
+
+	BindR3();
 	LoadTextureR(Link);
 	
 }
