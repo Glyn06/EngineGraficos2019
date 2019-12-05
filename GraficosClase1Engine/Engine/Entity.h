@@ -32,7 +32,7 @@ protected:
 	char* name;
 	unsigned char* data;
 	bool Moved= false;
-	float posX, posY;
+	float posX, posY, rotation;
 public:
 
 	Entity();
@@ -54,8 +54,10 @@ public:
 	bool GetMove();
 	void SetX(float nx);
 	void SetY(float ny);
+	void SetRotation(float r);
 	float GetX();
 	float GetY();
+	float GetRotation();
 	unsigned char* GetData();
 	~Entity();
 

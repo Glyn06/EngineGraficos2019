@@ -3,5 +3,12 @@
   1 archivo(s) copiado(s)
   C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\GLEW\dll\glew32.dll
   1 archivo(s) copiado(s)
+  Game.cpp
+c:\users\administrador\desktop\repo\enginegraficos2019\graficosclase1engine\game\game.cpp(42): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
   Zelda.cpp
-  Game.vcxproj -> C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe
+  Generando código...
+  LINK : no se encontró C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+     Creando biblioteca C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.lib y objeto C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exp
+Zelda.obj : error LNK2019: símbolo externo "public: void __thiscall Entity::SetRotation(float)" (?SetRotation@Entity@@QAEXM@Z) sin resolver al que se hace referencia en la función "public: void __thiscall Zelda::SpinL(void)" (?SpinL@Zelda@@QAEXXZ)
+Zelda.obj : error LNK2019: símbolo externo "public: float __thiscall Entity::GetRotation(void)" (?GetRotation@Entity@@QAEMXZ) sin resolver al que se hace referencia en la función "public: void __thiscall Zelda::SpinL(void)" (?SpinL@Zelda@@QAEXXZ)
+C:\Users\Administrador\Desktop\repo\EngineGraficos2019\GraficosClase1Engine\bin\Game.exe : fatal error LNK1120: 2 externos sin resolver

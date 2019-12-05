@@ -11,7 +11,7 @@
 using namespace std;
 //class Render;
 Renderer* render;
-Input* inp;
+
 void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
 int rotate = 0;
 
@@ -43,7 +43,7 @@ void Engine::startGLFW()
 	/* Initialize the library */
 	
 	render = new Renderer();
-	inp = new Input();
+	
 	Loop();
 }
 
@@ -68,11 +68,11 @@ void Engine::Loop()
 		//render->movingRotatingAndScale();
 		glfwSwapBuffers((GLFWwindow*)window->GetWindow());
 
-
+		inp->CheckActions();
 		/* Poll for and process events */
 		
 		
-		glfwPollEvents();
+		
 		
 
 	}
@@ -103,12 +103,14 @@ void Engine::LoadTextureOrigin(Entity* ente)
 {
 	render->OriginLoadTexture(ente);
 }
-void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) 
+
+/*void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {
+	
 	float* inputs =	inp->Inputs(key, action);
 	render->RotatationShape(inputs[0]);
 	render->MovePositionShape(inputs[1], inputs[2]);
-}
+}*/
 void Engine::Movement(Entity* ent)
 {
 	if (ent->GetMove()) {

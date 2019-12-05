@@ -14,6 +14,7 @@ class EXPORTER Engine{
 protected:
 	Window* window;
 	int n = 0;
+	Input* inp;
 
 public:
 	Engine(); 
@@ -30,8 +31,8 @@ public:
 	virtual void Update()=0;
 	virtual void InputE() =0;
 	virtual void DeInit()=0;
-	void FuckYou();
 	void Movement(Entity* ent);
+	
 	void startGLFW();
 	~Engine(); 
 };

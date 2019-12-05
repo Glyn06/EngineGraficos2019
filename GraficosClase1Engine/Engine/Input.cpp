@@ -1,39 +1,63 @@
 #include "Input.h"
+#include "glew.h"
+#include "GLFW/glfw3.h"
 
-float* Input::Inputs(int key, int action)
+int keyLength;
+KeyState* keys;
+Input::Input(const void* _window, int Lenght)
 {
-	float* posChange = new float[3];
-	//rot, x, y
-	float rot=0.0f,	x = 0.0f, y = 0.0f;
-
-	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		rot = -1.0f;
-	}
-	else
-	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		rot = 1.0f;
-	}
-	if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		x -= 0.01f;
-	}
-	if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		x += 0.01f;
-	}
-	if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		y += 0.01f;
-	}
-	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		y -= 0.01f;
-	}
-
-	posChange[0] = rot;
-	posChange[1] = x;
-	posChange[2] = y;
-	return posChange;
+	keyLength = Lenght;
+	keys = new KeyState[keyLength];
+	//window = _window;
+	
 }
+
+
+void Input::Inputs()
+{
+	glfwPollEvents();
+}
+void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	PlayAction(key, action);
+}
+void Input::NewAction(int _key, FuncPointer _action, int locat)
+{
+	
+	keys[locat].Key = _key;
+	keys[locat].Action = _action;
+}
+
+int GetLength()
+{
+	return keyLength; 
+}
+
+
+void Input::CheckActions()
+{ 
+	glfwPollEvents(); 
+}
+
+void PlayAction(int key, int action)
+{
+	for (int i = 0; i < GetLength(); i++)
+	{
+		if (keys[i].Key == key && (action == GLFW_REPEAT || action == GLFW_PRESS))
+		{
+			keys[i].Action();
+		}
+	}
+
+}
+/*
+FuncPointer* Input::GetActions()
+{
+	
+	for (int i = 0; i < keyLength; i++)
+	{
+		if(keys[i].Key == )
+	}
+	return activeActions;
+}*/
+

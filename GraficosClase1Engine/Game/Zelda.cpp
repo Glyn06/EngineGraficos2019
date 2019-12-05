@@ -1,5 +1,6 @@
 #include "Zelda.h"
 //renderer se incluye en: entity.h, engine.cpp (.h comentado), renderer.cpp
+
 Zelda::Zelda()
 {
 	startGLFW();
@@ -23,6 +24,8 @@ void Zelda::Init()
 	Link = new Sprite();
 	Link->LoadAtribs(str, width, height, nrChannels);
 	Link->SetMove(true);
+	
+	//inp->NewAction(GLFW_KEY_W, void(*MoveUp)());
 
 	Obstacle = new Shape();
 	Obstacle->LoadAtribs(str2, width2, height2, nrChannels);
@@ -36,27 +39,18 @@ void Zelda::Init()
 
 	BindR3();
 	//LoadTextureR(Link);
-
+	inp = new Input(window, 6);
+	//inp->NewAction(GLFW_KEY_W, &MoveUp, 0);
+	//inp->NewAction(GLFW_KEY_S, &MoveDown, 1);
+	//inp->NewAction(GLFW_KEY_A, &MoveLeft, 2);
+	//inp->NewAction(GLFW_KEY_D, &MoveRight, 3);
+	//inp->NewAction(GLFW_KEY_LEFT, &SpinL, 4);
+	//inp->NewAction(GLFW_KEY_RIGHT, &SpinR, 5);
+	
 }
 void Zelda::Update()
 {
-	//we **Should** use animation to change the texture but its unimplemented as we cannot load the damn texture yet
-	//the parameters are loaded correctly,its accessing the corect functions, it translates scales etc yet it doesnt work.
-	//IM NOT SURE THE ATRIBS ARE LOADED CORRECTLY
-	//NEITHER TEXTURE NOR PURE COLORS WORK, SO NONE OF THE BLEND FUNC ARE TO FAULT (yet), COULD BE A RGBA/RGB ERROR AS WE CHANGED THEM A BIT (?)
-
-	//ALTERNATIVELY, GLEW AND GLFW ARE ACTING UP AGAIN BECAUSE IT WAS MADE BY MORONS WHOSE MOTHERS SMELL OF ELDERBERRIES
-
-
-
-
-	//render->Bind(Link->GetVertexPointer(),Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
-	//render->LoadTexture();
 	
-	//render->LoadTexture(Link);
-	
-	
-	//Link->Draw(*render);
 	n++;
 	printf("\r frame: %i and should draw ",n);
 	
@@ -97,18 +91,37 @@ void Zelda::DeInit()
 {
 	
 }
-void Zelda::Spin()
+void Zelda::SpinL()
 {
-
+	Link->SetRotation(Link->GetRotation()+1.0f);
 }
-/*
-void Zelda::Movement()
+void Zelda::SpinR()
 {
-
-}*/
+	Link->SetRotation(Link->GetRotation()-1.0f);
+}
+void Zelda::LinkMovement()
+{
+	Movement(Link);
+}
+void Zelda::MoveUp()
+{
+	Link->SetY(Link->GetY() + 1.0f);
+}
+void Zelda::MoveDown()
+{
+	Link->SetY(Link->GetY() - 1.0f);
+}
+void Zelda::MoveLeft()
+{
+	Link->SetX(Link->GetX()+ 1.0f);
+}
+void Zelda::MoveRight()
+{
+	Link->SetX(Link->GetX() - 1.0f);
+}
 void Zelda::InputE()
 {
-
+	
 }
 Zelda::~Zelda()
 {

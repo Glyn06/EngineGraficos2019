@@ -223,8 +223,10 @@ void Entity::SetMove(bool b) { Moved = b; }
 bool Entity::GetMove() { return Moved; }
 void Entity::SetX(float nx) { posX = nx; }
 void Entity::SetY(float ny) { posY = ny; }
+void Entity::SetRotation(float r) { rotation = r; }
 float Entity::GetX() { return posX; }
 float Entity::GetY() { return posY; }
+float Entity::GetRotation() { return rotation; }
 Entity::~Entity()
 {
 }
