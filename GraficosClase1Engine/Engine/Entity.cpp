@@ -5,6 +5,7 @@
 Entity::Entity()
 {
 	printf("Entity created! const default\n");
+	rot = 0.0f;
 }
 void Entity::LoadAtribs(string _path, int _width, int _height, int _nrChannels)
 {
@@ -221,6 +222,10 @@ unsigned char* Entity::GetData()
 }
 void Entity::SetMove(bool b) { Moved = b; }
 bool Entity::GetMove() { return Moved; }
+void Entity::SetRotation(float r) { rot = r; }
+float Entity::GetRotation() { return rot; }
+void Entity::SetScale(float s) { scal = s; }
+float Entity::GetScale() { return scal; }
 void Entity::SetX(float nx) { posX = nx; }
 void Entity::SetY(float ny) { posY = ny; }
 float Entity::GetX() { return posX; }

@@ -33,6 +33,8 @@ protected:
 	unsigned char* data;
 	bool Moved= false;
 	float posX, posY;
+	float rot;
+	float scal;
 public:
 
 	Entity();
@@ -52,11 +54,16 @@ public:
 	int GetIndexSize();
 	void SetMove(bool b);
 	bool GetMove();
+	void SetRotation(float r);
+	float GetRotation();
+	void SetScale(float s);
+	float GetScale();
 	void SetX(float nx);
 	void SetY(float ny);
 	float GetX();
 	float GetY();
 	unsigned char* GetData();
+	void Draw();
 	~Entity();
 
 };

@@ -23,13 +23,16 @@ void Zelda::Init()
 	Link = new Sprite();
 	Link->LoadAtribs(str, width, height, nrChannels);
 	Link->SetMove(true);
+	Link->SetScale(0.5f);
+	Link->SetRotation(0.0f);
 
 	Obstacle = new Shape();
 	Obstacle->LoadAtribs(str2, width2, height2, nrChannels);
 	Obstacle->SetMove(false);
 	Obstacle->SetX(0.7f);
 	Obstacle->SetY(0.5f);
-
+	Obstacle->SetScale(1.0f);
+	
 	//render->Bind(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	//BindR(Link->GetVertexPointerF(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
 	//BindR2(Link->GetVertexPointer(), Link->GetIndexPointer(), Link->GetVertexSize(), Link->GetIndexSize());
@@ -86,7 +89,7 @@ void Zelda::Update()
 	LoadTextureOrigin(Link);
 	Movement(Link);
 	DrawEntityR(Link);
-	
+	//unbind
 
 	LoadTextureOrigin(Obstacle);
 	Movement(Obstacle);

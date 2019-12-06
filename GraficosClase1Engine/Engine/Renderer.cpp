@@ -76,6 +76,10 @@ glm::vec3 sMatrix;
 
 std::chrono::time_point<std::chrono::system_clock> then;
 GLFWwindow* windForGl;
+
+GLint posAttrib;
+GLint colAttrib;
+GLint texAttrib;
 Renderer::Renderer()
 {
 
@@ -111,21 +115,25 @@ void BackgroundColor(float r, float g, float b)
 	glClearColor(r, g, b, 1.0f);			//con esto podemos cambiar el color del fondo
 }
 
-void TranslateMatrix(glm::vec3 trans)
+void Renderer::TranslateMatrix(int x, int y)
 {
-	glm::mat4 transMatrix = glm::translate(glm::mat4(1.0f), trans);
+	tMatrix = glm::vec3(x, y, 0.5f);
+
+	glm::mat4 transMatrix = glm::translate(glm::mat4(1.0f), tMatrix);
 
 	GLint uniTrans = glGetUniformLocation(shaderProgram, "translate");
 	glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(transMatrix));		
 }
 
-void ScaleMatrix(glm::vec3 scale)
+void Renderer::ScaleMatrix(float scale)
 {
-	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+	sMatrix = glm::vec3(scale, scale, scale);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), sMatrix);
 
 	GLint uniScale = glGetUniformLocation(shaderProgram, "scale");
 	glUniformMatrix4fv(uniScale, 1, GL_FALSE, glm::value_ptr(scaleMatrix));
 }
+/*
 void Renderer::movingRotatingAndScale()
 {
 
@@ -150,7 +158,7 @@ void Renderer::movingRotatingAndScaleUnMoving(float unmx, float unmy)
 	TranslateMatrix(tMatrix);
 	ScaleMatrix(sMatrix);
 	SpinTriangle(0);
-}
+}*/
 void View()
 {
 	/*
@@ -201,7 +209,7 @@ void Renderer::Draw()
 	
 	
 
-	movingRotatingAndScale();
+	//movingRotatingAndScale();
 	
 }
 void Renderer::MovePositionShape(float x, float y)
@@ -460,11 +468,11 @@ void Renderer::OriginBind()
 		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(posAttrib);
 		*/
-		GLint colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
+		colAttrib = glGetAttribLocation(shaderProgram, "triangleColor");
 		glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(2 * sizeof(float)));
 		glEnableVertexAttribArray(colAttrib);
 
-		GLint texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
+		texAttrib = glGetAttribLocation(shaderProgram, "textCoord");
 		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(texAttrib);
 		glEnable(GL_BLEND);
@@ -474,7 +482,7 @@ void Renderer::OriginBind()
 }
 void Renderer::OriginLoadTexture(Entity* ent)
 {
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	posAttrib = glGetAttribLocation(shaderProgram, "position");				//
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(posAttrib);
 	glGenTextures(1, &ourTexture);
@@ -517,4 +525,12 @@ void Renderer::DrawEntity(Entity* ent)
 	glBindTexture(GL_TEXTURE_2D, ourTexture);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);		//hay que bindear las cosas bien antes, ya hice
+	
+	//glDisableVertexAttribArray();
+}
+void Renderer::UnBind() {
+	glDisableVertexAttribArray(posAttrib);		//solo para los atrib del vertexbuffer
+	glDisableVertexAttribArray(colAttrib);     // RECORDAR: En el Zak Engine 0 es el posAttrib, 1 = el ColAttrib;
+	glDisableVertexAttribArray(texAttrib);
+	//glDisableVertexAttribArray();
 }

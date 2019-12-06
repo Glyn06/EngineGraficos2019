@@ -28,8 +28,8 @@ public:
 
 	Renderer();
 	void Draw();
-	void movingRotatingAndScale();
-	void movingRotatingAndScaleUnMoving(float unmx, float unmy);
+	//void movingRotatingAndScale();
+	//void movingRotatingAndScaleUnMoving(float unmx, float unmy);
 	void SpinTriangle(float speed);
 	void MovePositionShape(float x, float y);
 	void RotatationShape(float rot);
@@ -38,7 +38,8 @@ public:
 	void LoadTexture(Entity* ent);
 	
 	//void LoadTextureToShader();
-
+	void TranslateMatrix(int x, int y);
+	void ScaleMatrix(float scale);
 	void LoadShaders2(float _vertex[]);	//shaders without color, it gets loaded in bind
 	void Bind(Vertex* vertexBuffer, int _index[], int _vertexSize, int _indexSize);	//for shape also loads into shader
 	void Bind(float* vertexBuffer, int _index[], int _vertexSize, int _indexSize);	//for shape also loads into shader
@@ -50,7 +51,7 @@ public:
 	void OriginLoadTexture(Entity* ent);
 	void HalfDraw();
 	void DrawEntity(Entity* ent);
-	
+	void UnBind();
 	~Renderer();
 };
 #endif

@@ -112,11 +112,13 @@ void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods
 void Engine::Movement(Entity* ent)
 {
 	if (ent->GetMove()) {
-		render->movingRotatingAndScale();
+		//render->movingRotatingAndScale();
+		render->TranslateMatrix(ent->GetX(), ent->GetY());
+		render->ScaleMatrix(ent->GetScale());
 		printf("drawing movable");
 	}
 	else{
-		render->movingRotatingAndScaleUnMoving(ent->GetX(), ent->GetY());
+		//render->movingRotatingAndScaleUnMoving(ent->GetX(), ent->GetY());
 		printf(" drawing OBST \n");
 	}
 }
@@ -127,4 +129,5 @@ void Engine::HalfDrawR()
 void Engine::DrawEntityR(Entity* ent)
 {
 	render->DrawEntity(ent);
+	render->UnBind();
 }
